@@ -3,7 +3,7 @@ name: deploy
 on: [push]
 
 jobs:
-  lint:
+  deploy-github:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/setup-node@master
