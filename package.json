@@ -1,17 +1,67 @@
 {
   "name": "react-native-sodium",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/lyubo/react-native-sodium.git"
+    "type": "git",
+    "url": "https://github.com/lyubo/react-native-sodium.git"
   },
+  "source": "index.js",
   "scripts": {
+    "typescript": "tsc --noEmit",
+    "lint": "eslint --ext .js,.ts,.tsx .",
+    "example": "yarn --cwd example",
+    "pods": "cd example && pod-install --quiet",
+    "bootstrap": "yarn example && yarn && yarn pods",
     "postinstall": "tar -xzf precompiled.tgz",
     "rebuild": "./build.sh"
   },
-  "version": "0.3.6",
+  "devDependencies": {
+    "@react-native-community/eslint-config": "^1.1.0",
+    "@types/react": "^16.9.19",
+    "@types/react-native": "0.62.7",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.3",
+    "pod-install": "^0.1.5",
+    "prettier": "^2.0.5",
+    "react": "~16.11.0",
+    "react-native": "~0.62.2",
+    "typescript": "^3.8.3"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
+  },
+  "eslintConfig": {
+    "extends": [
+      "@react-native-community",
+      "prettier"
+    ],
+    "rules": {
+      "prettier/prettier": [
+        "error",
+        {
+          "quoteProps": "consistent",
+          "singleQuote": true,
+          "tabWidth": 2,
+          "trailingComma": "es5",
+          "useTabs": false
+        }
+      ]
+    }
+  },
+  "eslintIgnore": ["node_modules/"],
+  "prettier": {
+    "quoteProps": "consistent",
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "es5",
+    "useTabs": false
+  },
+  "version": "0.4.0",
   "description": "The Sodium crypto library for React Native.",
   "author": "Lyubomir Ivanov",
   "main": "index.js",
+  "types": "index.d.ts",
   "nativePackage": true,
   "license": "ISC",
   "homepage": "https://github.com/lyubo/react-native-sodium",

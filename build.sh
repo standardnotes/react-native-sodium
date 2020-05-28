@@ -28,7 +28,7 @@ do
   # --------------------------
   platform=`uname`
   if [ "$platform" == 'Darwin' ] && [ "$targetPlatform" == 'ios' ]; then
-    IOS_VERSION_MIN=6.0 dist-build/ios.sh
+    IOS_VERSION_MIN=9.0 dist-build/ios.sh
   fi
 
   # --------------------------
@@ -36,19 +36,19 @@ do
   # --------------------------
   case $targetPlatform in
     "arm-old")
-      dist-build/android-arm.sh
+      NDK_PLATFORM=android-21 dist-build/android-arm.sh
       ;;
     "arm")
-      dist-build/android-armv7-a.sh
-      dist-build/android-armv8-a.sh
+      NDK_PLATFORM=android-21 dist-build/android-armv7-a.sh
+      NDK_PLATFORM=android-21 dist-build/android-armv8-a.sh
       ;;
     "mips")
-      dist-build/android-mips32.sh
-      dist-build/android-mips64.sh
+      NDK_PLATFORM=android-21 dist-build/android-mips32.sh
+      NDK_PLATFORM=android-21 dist-build/android-mips64.sh
       ;;
     "x86")
-      dist-build/android-x86.sh
-      dist-build/android-x86_64.sh
+      NDK_PLATFORM=android-21 dist-build/android-x86.sh
+      NDK_PLATFORM=android-21 dist-build/android-x86_64.sh
     ;;
   esac
 
