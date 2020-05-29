@@ -71,6 +71,11 @@ if [ "$platform" == 'Darwin' ] && [ -e $srcdir/libsodium-ios ]; then
   mv $srcdir/libsodium-ios libsodium/
 fi
 
+# --------------------------
+# Update precompiled.tgz
+# --------------------------
+tar -cvzf precompiled.tgz libsodium/
+
 
 # --------------------------
 # Cleanup
