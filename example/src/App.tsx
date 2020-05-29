@@ -978,11 +978,6 @@ const App: React.FC = () => {
     _testBox2();
   }, [_testAuth1]);
 
-  useEffect(() => {
-    InteractionManager.runAfterInteractions(() => {
-      startTests();
-    });
-  }, [startTests]);
   const isFinished =
     !sodiumError &&
     sodium_version_string &&
