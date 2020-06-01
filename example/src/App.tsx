@@ -11,7 +11,8 @@ import {
   ActivityIndicator,
 } from 'react-native';
 
-import Base64 from 'base64-js';
+import base64 from 'base64-js';
+import { Base64 } from 'js-base64';
 import Sodium from 'react-native-sodium';
 
 const TestResult: React.FC<{ value: boolean | undefined; name: string }> = (
@@ -53,6 +54,9 @@ const App: React.FC = () => {
   const [crypto_auth_verify, setCryptoAuthVerify] = React.useState<boolean>();
   const [crypto_box1, setCryptoBox1] = React.useState<boolean>();
   const [crypto_box2, setCryptoBox2] = React.useState<boolean>();
+  const [crypto_aead_xchacha20poly1305_ietf, setCryptoXchacha] = React.useState<
+    boolean
+  >();
 
   const _handleError = (error: string) => {
     console.log(error);
@@ -78,7 +82,7 @@ const App: React.FC = () => {
     let freq: Array<number> = [];
     for (let i = 0; i < 256; ++i) freq[i] = 0;
     Sodium.randombytes_buf(20 * 256).then((value) => {
-      let a = Base64.toByteArray(value);
+      let a = base64.toByteArray(value);
       for (let i = 0; i < a.length; ++i) ++freq[a[i]];
       let fail = false;
       for (let i = 0; i < 256 && !fail; ++i) if (!freq[i]) fail = true;
@@ -108,7 +112,7 @@ const App: React.FC = () => {
   };
 
   const _testSecretBox1 = () => {
-    const k = Base64.fromByteArray(
+    const k = base64.fromByteArray(
       new Uint8Array([
         0x1b,
         0x27,
@@ -145,7 +149,7 @@ const App: React.FC = () => {
       ])
     );
 
-    const n = Base64.fromByteArray(
+    const n = base64.fromByteArray(
       new Uint8Array([
         0x69,
         0x69,
@@ -174,7 +178,7 @@ const App: React.FC = () => {
       ])
     );
 
-    const m = Base64.fromByteArray(
+    const m = base64.fromByteArray(
       new Uint8Array([
         0xbe,
         0x07,
@@ -324,79 +328,23 @@ const App: React.FC = () => {
   };
 
   const _testAuth1 = useCallback(() => {
-    const k = Base64.fromByteArray(
+    const k = base64.fromByteArray(
+      // prettier-ignore
       new Uint8Array([
         // Jefe
-        0x4a,
-        0x65,
-        0x66,
-        0x65,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
-        0x00,
+        0x4a,0x65,0x66,0x65, 0x00,0x00,0x00,0x00,0x00,0x00,0x00, 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
       ])
     );
 
-    const c = Base64.fromByteArray(
+    const c = base64.fromByteArray(
+      // prettier-ignore
       new Uint8Array([
         // what do ya want for nothing?
-        0x77,
-        0x68,
-        0x61,
-        0x74,
-        0x20,
-        0x64,
-        0x6f,
-        0x20,
-        0x79,
-        0x61,
-        0x20,
-        0x77,
-        0x61,
-        0x6e,
-        0x74,
-        0x20,
-        0x66,
-        0x6f,
-        0x72,
-        0x20,
-        0x6e,
-        0x6f,
-        0x74,
-        0x68,
-        0x69,
-        0x6e,
-        0x67,
-        0x3f,
+        0x77,0x68,0x61,0x74,0x20,0x64,0x6f,0x20,0x79,0x61,0x20,0x77,0x61,0x6e,0x74,0x20,0x66,0x6f,0x72,0x20,0x6e,0x6f,0x74,0x68,0x69,0x6e,0x67,0x3f,
       ])
     );
 
-    const a = Base64.fromByteArray(
+    const a = base64.fromByteArray(
       new Uint8Array([
         0x16,
         0x4b,
@@ -485,7 +433,7 @@ const App: React.FC = () => {
 
   const _testBox2 = () => {
     setCryptoBox2(undefined);
-    const alicepk = Base64.fromByteArray(
+    const alicepk = base64.fromByteArray(
       new Uint8Array([
         0x85,
         0x20,
@@ -522,7 +470,7 @@ const App: React.FC = () => {
       ])
     );
 
-    const alicesk = Base64.fromByteArray(
+    const alicesk = base64.fromByteArray(
       new Uint8Array([
         0x77,
         0x07,
@@ -559,7 +507,7 @@ const App: React.FC = () => {
       ])
     );
 
-    const bobpk = Base64.fromByteArray(
+    const bobpk = base64.fromByteArray(
       new Uint8Array([
         0xde,
         0x9e,
@@ -596,7 +544,7 @@ const App: React.FC = () => {
       ])
     );
 
-    const bobsk = Base64.fromByteArray(
+    const bobsk = base64.fromByteArray(
       new Uint8Array([
         0x5d,
         0xab,
@@ -633,7 +581,7 @@ const App: React.FC = () => {
       ])
     );
 
-    const nonce = Base64.fromByteArray(
+    const nonce = base64.fromByteArray(
       new Uint8Array([
         0x69,
         0x69,
@@ -662,7 +610,7 @@ const App: React.FC = () => {
       ])
     );
 
-    const m = Base64.fromByteArray(
+    const m = base64.fromByteArray(
       new Uint8Array([
         0xbe,
         0x07,
@@ -798,7 +746,7 @@ const App: React.FC = () => {
       ])
     );
 
-    const c = Base64.fromByteArray(
+    const c = base64.fromByteArray(
       new Uint8Array([
         0xf3,
         0xff,
@@ -957,26 +905,51 @@ const App: React.FC = () => {
     });
   };
 
+  const _testXchachaEncryption = async () => {
+    setCryptoXchacha(undefined);
+    const message = 'Test message fdsfsdfsdgdfgxdvxbfd';
+    const key = await Sodium.crypto_aead_xchacha20poly1305_ietf_keygen();
+    const nonce = await Sodium.randombytes_buf(
+      Sodium.crypto_aead_xchacha20poly1305_IETF_NPUBBYTES
+    );
+    const encrypted = await Sodium.crypto_aead_xchacha20poly1305_ietf_encrypt(
+      Base64.encode(message),
+      nonce,
+      key,
+      null
+    );
+
+    const decrypted = await Sodium.crypto_aead_xchacha20poly1305_ietf_decrypt(
+      encrypted,
+      nonce,
+      key,
+      null
+    );
+    console.log(encrypted, decrypted);
+    setCryptoXchacha(Base64.decode(decrypted) === message);
+  };
+
   const startTests = useCallback(() => {
     Sodium.sodium_version_string()
       .then((version) => setSodiumVersion(version))
       .catch((error) => _handleError(error));
 
     // Random data generation
-    _testRandom1();
-    _testRandom2();
-    _testRandom3();
+    // _testRandom1();
+    // _testRandom2();
+    // _testRandom3();
 
-    // Secret key cryptography - authenticated encryption
-    _testSecretBox1();
+    // // Secret key cryptography - authenticated encryption
+    // _testSecretBox1();
 
-    // Secret key cryptography - authentication
-    _testAuth1();
+    // // Secret key cryptography - authentication
+    // _testAuth1();
 
-    // Public-key cryptography - authenticated encryption
-    _testBox1();
-    _testBox2();
-  }, [_testAuth1]);
+    // // Public-key cryptography - authenticated encryption
+    // _testBox1();
+    // _testBox2();
+    _testXchachaEncryption();
+  }, []);
 
   const isFinished =
     !sodiumError &&
@@ -1003,6 +976,10 @@ const App: React.FC = () => {
         <TestResult name="crypto_auth_verify" value={crypto_auth_verify} />
         <TestResult name="crypto_box1" value={crypto_box1} />
         <TestResult name="crypto_box2" value={crypto_box2} />
+        <TestResult
+          name="crypto_aead_xchacha20poly1305_ietf"
+          value={crypto_aead_xchacha20poly1305_ietf}
+        />
         <ActivityIndicator animating={!isFinished} />
       </ScrollView>
     </SafeAreaView>

@@ -107,14 +107,10 @@ export const crypto_secretbox_KEYBYTES: number;
 export const crypto_secretbox_MACBYTES: number;
 export const crypto_secretbox_MESSAGEBYTES_MAX: number;
 export const crypto_secretbox_NONCEBYTES: number;
-export const crypto_secretstream_xchacha20poly1305_ABYTES: number;
-export const crypto_secretstream_xchacha20poly1305_HEADERBYTES: number;
-export const crypto_secretstream_xchacha20poly1305_KEYBYTES: number;
-export const crypto_secretstream_xchacha20poly1305_MESSAGEBYTES_MAX: number;
-export const crypto_secretstream_xchacha20poly1305_TAG_FINAL: number;
-export const crypto_secretstream_xchacha20poly1305_TAG_MESSAGE: number;
-export const crypto_secretstream_xchacha20poly1305_TAG_PUSH: number;
-export const crypto_secretstream_xchacha20poly1305_TAG_REKEY: number;
+export const crypto_aead_xchacha20poly1305_ABYTES: number;
+export const crypto_aead_xchacha20poly1305_KEYBYTES: number;
+export const crypto_aead_xchacha20poly1305_IETF_NPUBBYTES: number;
+export const crypto_aead_xchacha20poly1305_IETF_NSECBYTES: number;
 export const crypto_shorthash_BYTES: number;
 export const crypto_shorthash_KEYBYTES: number;
 export const crypto_sign_BYTES: number;
@@ -123,8 +119,6 @@ export const crypto_sign_PUBLICKEYBYTES: number;
 export const crypto_sign_SECRETKEYBYTES: number;
 export const crypto_sign_SEEDBYTES: number;
 export const randombytes_SEEDBYTES: number;
-export const SODIUM_LIBRARY_VERSION_MAJOR: number;
-export const SODIUM_LIBRARY_VERSION_MINOR: number;
 
 export const ready: Promise<void>;
 
@@ -225,6 +219,22 @@ export function crypto_sign_ed25519_pk_to_curve25519(
 export function crypto_sign_ed25519_sk_to_curve25519(
   edSk: string
 ): Promise<string>;
+
+export function crypto_aead_xchacha20poly1305_ietf_encrypt(
+  message: string,
+  public_nonce: string,
+  key: string,
+  additional_data: string | null
+): Promise<string>;
+
+export function crypto_aead_xchacha20poly1305_ietf_decrypt(
+  cipherText: string,
+  public_nonce: string,
+  key: string,
+  additional_data: string | null
+): Promise<string>;
+
+export function crypto_aead_xchacha20poly1305_ietf_keygen(): Promise<string>;
 
 export function crypto_sign_keypair(): StringKeyPair;
 
