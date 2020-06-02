@@ -1,12 +1,11 @@
 /* eslint-disable no-bitwise */
-import React, { useEffect, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import {
   StyleSheet,
   Text,
   View,
   SafeAreaView,
   ScrollView,
-  InteractionManager,
   Button,
   ActivityIndicator,
 } from 'react-native';
@@ -925,7 +924,6 @@ const App: React.FC = () => {
       key,
       null
     );
-    console.log(encrypted, decrypted);
     setCryptoXchacha(Base64.decode(decrypted) === message);
   };
 

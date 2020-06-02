@@ -64,7 +64,7 @@ RCT_EXPORT_MODULE();
     @"crypto_pwhash_ALG_ARGON2I13":@crypto_pwhash_ALG_ARGON2I13,
     @"crypto_pwhash_ALG_ARGON2ID13":@crypto_pwhash_ALG_ARGON2ID13,
     @"crypto_aead_xchacha20poly1305_IETF_ABYTES":@crypto_aead_chacha20poly1305_IETF_ABYTES,
-    @"crypto_aead_xchacha20poly1305_KEYBYTES":@crypto_aead_xchacha20poly1305_IETF_KEYBYTES,
+    @"crypto_aead_xchacha20poly1305_IETF_KEYBYTES":@crypto_aead_xchacha20poly1305_IETF_KEYBYTES,
     @"crypto_aead_xchacha20poly1305_IETF_NPUBBYTES":@crypto_aead_xchacha20poly1305_IETF_NPUBBYTES,
     @"crypto_aead_xchacha20poly1305_IETF_NSECBYTES":@crypto_aead_xchacha20poly1305_IETF_NSECBYTES,
   };
@@ -196,7 +196,7 @@ RCT_EXPORT_METHOD(crypto_auth_verify:(NSString*)h in:(NSString*)in k:(NSString*)
 }
 
 // *****************************************************************************
-// * Public-key cryptography - xchacha encryption
+// * Public-key cryptography - XChaCha20-Poly1305 encryption
 // *****************************************************************************
 RCT_EXPORT_METHOD(crypto_aead_xchacha20poly1305_ietf_encrypt:(NSString*)message public_nonce:(NSString*)public_nonce key:(NSString*)key additionalData:(NSString*)additionalData resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 {

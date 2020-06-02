@@ -68,6 +68,10 @@ public class RCTSodiumModule extends ReactContextBaseJavaModule {
      constants.put("crypto_pwhash_ALG_DEFAULT", Sodium.crypto_pwhash_algo_default());
      constants.put("crypto_pwhash_ALG_ARGON2I13", Sodium.crypto_pwhash_algo_argon2i13());
      constants.put("crypto_pwhash_ALG_ARGON2ID13", Sodium.crypto_pwhash_algo_argon2id13());
+     constants.put("crypto_aead_xchacha20poly1305_IETF_ABYTES", Sodium.crypto_aead_chacha20poly1305_IETF_ABYTES());
+     constants.put("crypto_aead_xchacha20poly1305_IETF_KEYBYTES", Sodium.crypto_aead_xchacha20poly1305_IETF_KEYBYTES());
+     constants.put("crypto_aead_xchacha20poly1305_IETF_NPUBBYTES", Sodium.crypto_aead_xchacha20poly1305_IETF_NPUBBYTES());
+     constants.put("crypto_aead_xchacha20poly1305_IETF_NSECBYTES", Sodium.crypto_aead_xchacha20poly1305_IETF_NSECBYTES());
 
      return constants;
   }
@@ -210,6 +214,78 @@ public class RCTSodiumModule extends ReactContextBaseJavaModule {
       else {
         int result = Sodium.crypto_auth_verify(hb, inb, inb.length, kb);
         p.resolve(result);
+      }
+    }
+    catch (Throwable t) {
+      p.reject(ESODIUM,ERR_FAILURE,t);
+    }
+  }
+
+  // ***************************************************************************
+  // * Public-key cryptography - XChaCha20-Poly1305 encryption
+  // ***************************************************************************
+
+  @ReactMethod
+  public void crypto_aead_xchacha20poly1305_ietf_keygen(final Promise p) {
+    byte[] k = new byte[Sodium.crypto_aead_xchacha20poly1305_IETF_KEYBYTES()];
+    Sodium.crypto_aead_xchacha20poly1305_ietf_keygen(k);
+    String s = Base64.encodeToString(k, Base64.NO_WRAP);
+    p.resolve(s);
+  }
+
+  @ReactMethod
+  public void crypto_aead_xchacha20poly1305_ietf_encrypt(final String message, final String public_nonce, final String key, final String additionalData, final Promise p) {
+    try {
+      byte[] m = Base64.decode(message, Base64.NO_WRAP);
+      byte[] npub = Base64.decode(public_nonce, Base64.NO_WRAP);
+      byte[] k = Base64.decode(key, Base64.NO_WRAP);
+
+      if (m.length <= 0)
+        p.reject(ESODIUM,ERR_FAILURE);
+      else if (npub.length != Sodium.crypto_aead_xchacha20poly1305_IETF_NPUBBYTES())
+        p.reject(ESODIUM,ERR_BAD_NONCE);
+      else if (k.length != Sodium.crypto_aead_xchacha20poly1305_IETF_KEYBYTES())
+        p.reject(ESODIUM,ERR_BAD_KEY);
+      else {
+        byte[] ad = additionalData != null ? Base64.decode(additionalData, Base64.NO_WRAP) : null;
+        int adlen = additionalData != null ? ad.length : 0;
+        int[] clen = new int[0];
+        byte[] c = new byte[m.length + Sodium.crypto_aead_chacha20poly1305_IETF_ABYTES()];
+        int result = Sodium.crypto_aead_xchacha20poly1305_ietf_encrypt(c, clen, m, m.length, ad, adlen, null, npub, k);
+        if (result != 0)
+          p.reject(ESODIUM,ERR_FAILURE);
+        else
+          p.resolve(Base64.encodeToString(c, Base64.NO_WRAP));
+      }
+    }
+    catch (Throwable t) {
+      p.reject(ESODIUM,ERR_FAILURE,t);
+    }
+  }
+
+  @ReactMethod
+  public void crypto_aead_xchacha20poly1305_ietf_decrypt(final String cipherText, final String public_nonce, final String key, final String additionalData, final Promise p) {
+    try {
+      byte[] c = Base64.decode(cipherText, Base64.NO_WRAP);
+      byte[] npub = Base64.decode(public_nonce, Base64.NO_WRAP);
+      byte[] k = Base64.decode(key, Base64.NO_WRAP);
+      if (c.length <= 0)
+        p.reject(ESODIUM,ERR_FAILURE);
+      else if (npub.length != Sodium.crypto_aead_xchacha20poly1305_IETF_NPUBBYTES())
+        p.reject(ESODIUM,ERR_BAD_NONCE);
+      else if (k.length != Sodium.crypto_aead_xchacha20poly1305_IETF_KEYBYTES())
+        p.reject(ESODIUM,ERR_BAD_KEY);
+      else {
+        byte[] ad = additionalData != null ? Base64.decode(additionalData, Base64.NO_WRAP) : null;
+        int adlen = additionalData != null ? ad.length : 0;
+        int[] decrypted_len = new int[1];
+        byte[] decrypted = new byte[c.length - Sodium.crypto_aead_chacha20poly1305_IETF_ABYTES()];
+
+        int result = Sodium.crypto_aead_xchacha20poly1305_ietf_decrypt(decrypted, decrypted_len, null, c, c.length, ad, adlen, npub, k);
+        if (result != 0)
+          p.reject(ESODIUM,ERR_FAILURE);
+        else
+          p.resolve(Base64.encodeToString(decrypted,Base64.NO_WRAP));
       }
     }
     catch (Throwable t) {
@@ -375,7 +451,7 @@ public class RCTSodiumModule extends ReactContextBaseJavaModule {
       byte[] saltb = Base64.decode(salt, Base64.NO_WRAP);
       byte[] passwordb = Base64.decode(password, Base64.NO_WRAP);
       byte[] out = new byte[keylen];
-      
+
       int result = Sodium.crypto_pwhash(out, out.length, passwordb, passwordb.length, saltb, opslimit, memlimit, algo);
       if (result != 0)
         p.reject(ESODIUM,ERR_FAILURE);

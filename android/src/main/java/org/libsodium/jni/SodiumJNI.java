@@ -64,4 +64,13 @@ public class SodiumJNI {
   public final static native int crypto_sign_ed25519_pk_to_curve25519(byte[] curve25519_pk, final byte[] ed25519_pk);
   public final static native int crypto_sign_ed25519_sk_to_curve25519(byte[] curve25519_sk, final byte[] ed25519_sk);
   public final static native int crypto_sign_ed25519_sk_to_pk(byte[] sk, byte[] pk);
+
+  public final static native int crypto_aead_chacha20poly1305_IETF_ABYTES();
+  public final static native int crypto_aead_xchacha20poly1305_IETF_KEYBYTES();
+  public final static native int crypto_aead_xchacha20poly1305_IETF_NPUBBYTES();
+  public final static native int crypto_aead_xchacha20poly1305_IETF_NSECBYTES();
+
+  public final static native char crypto_aead_xchacha20poly1305_ietf_keygen(byte[] k);
+  public final static native int crypto_aead_xchacha20poly1305_ietf_encrypt(byte[] c, int[] clen_p, final byte[] m, final int mlen, final byte[] ad, final int adlen, final byte[] nsec, final byte[] npub, final byte[] k);
+  public final static native int crypto_aead_xchacha20poly1305_ietf_decrypt(byte[] m, int[] mlen_p, byte[] nsec, byte[] c, int clen, byte[] ad, int adlen, byte[] npub, byte[] k);
 }
