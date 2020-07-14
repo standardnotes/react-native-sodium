@@ -231,23 +231,25 @@ RCT_EXPORT_METHOD(crypto_aead_xchacha20poly1305_ietf_decrypt:(NSString*)cipherTe
   const NSData *dn = [[NSData alloc] initWithBase64EncodedString:public_nonce options:0];
   const NSData *dk = [[NSData alloc] initWithBase64EncodedString:key options:0];
   if (!dc || !dn || !dk) reject(ESODIUM,ERR_FAILURE,nil);
-  if (dk.length != crypto_aead_xchacha20poly1305_IETF_KEYBYTES) reject(ESODIUM,ERR_BAD_KEY,nil);
-  if (dn.length != crypto_aead_xchacha20poly1305_ietf_NPUBBYTES) reject(ESODIUM,ERR_BAD_NONCE,nil);
-    const NSData *ad = additionalData != NULL ? [[NSData alloc] initWithBase64EncodedString:additionalData  options:0] : NULL;
-    unsigned long adlen = additionalData != NULL ? ad.length : 0;
+  else if (dk.length != crypto_aead_xchacha20poly1305_IETF_KEYBYTES) reject(ESODIUM,ERR_BAD_KEY,nil);
+  else if (dn.length != crypto_aead_xchacha20poly1305_ietf_NPUBBYTES) reject(ESODIUM,ERR_BAD_NONCE,nil);
+  else {
+      const NSData *ad = additionalData != NULL ? [[NSData alloc] initWithBase64EncodedString:additionalData  options:0] : NULL;
+      unsigned long adlen = additionalData != NULL ? ad.length : 0;
 
-    unsigned long long decrypted_len = [NSNumber numberWithLongLong: dc.length].unsignedLongLongValue;
-    unsigned char* decrypted = (unsigned char *) sodium_malloc(decrypted_len - crypto_aead_chacha20poly1305_IETF_ABYTES);
+      unsigned long long decrypted_len = [NSNumber numberWithLongLong: dc.length].unsignedLongLongValue;
+      unsigned char* decrypted = (unsigned char *) sodium_malloc(decrypted_len - crypto_aead_chacha20poly1305_IETF_ABYTES);
 
-    if (crypto_aead_xchacha20poly1305_ietf_decrypt(decrypted, &decrypted_len, NULL, [dc bytes], dc.length, ad ? [ad bytes] : NULL, adlen, [dn bytes], [dk bytes]) == -1) {
-      reject(ESODIUM,ERR_FAILURE,nil);
-    }
-    else {
-      const NSData *resData = [NSData dataWithBytesNoCopy:decrypted length:decrypted_len freeWhenDone:NO];
-      const NSString *res = [resData base64EncodedStringWithOptions:0];
-      resolve(res);
-    }
-    sodium_free(decrypted);
+      if (crypto_aead_xchacha20poly1305_ietf_decrypt(decrypted, &decrypted_len, NULL, [dc bytes], dc.length, ad ? [ad bytes] : NULL, adlen, [dn bytes], [dk bytes]) == -1) {
+        reject(ESODIUM,ERR_FAILURE,nil);
+      }
+      else {
+        const NSData *resData = [NSData dataWithBytesNoCopy:decrypted length:decrypted_len freeWhenDone:NO];
+        const NSString *res = [resData base64EncodedStringWithOptions:0];
+        resolve(res);
+      }
+      sodium_free(decrypted);
+  }
 }
 
 RCT_EXPORT_METHOD(crypto_aead_xchacha20poly1305_ietf_keygen:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
