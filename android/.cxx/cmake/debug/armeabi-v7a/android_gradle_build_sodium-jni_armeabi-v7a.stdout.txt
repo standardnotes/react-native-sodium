@@ -1,0 +1,6 @@
+[1/2] Building C object CMakeFiles/sodium-jni.dir/src/main/cpp/sodium-jni.c.o
+/Users/radko93/Repo/react-native-sodium/android/src/main/cpp/sodium-jni.c:495:10: warning: incompatible pointer to integer conversion returning 'unsigned char *' from a function with result type 'jchar' (aka 'unsigned short') [-Wint-conversion]
+  return k;
+         ^
+1 warning generated.
+[2/2] Linking C shared library ../../../../build/intermediates/cmake/debug/obj/armeabi-v7a/libsodium-jni.so

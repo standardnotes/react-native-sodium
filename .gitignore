@@ -38,7 +38,10 @@ project.xcworkspace
 .gradle
 local.properties
 android.iml
-android/.cxx
+android/build
+android/.externalNativeBuild
+android/lib
+# android/.cxx
 
 # Cocoapods
 #

@@ -1,0 +1,72 @@
+{
+  "variant": {
+    "module": {
+      "rootBuildGradleFolder": "/Users/radko93/Repo/react-native-sodium/example/android",
+      "sdkFolder": "/Users/radko93/Library/Android/sdk",
+      "isNativeCompilerSettingsCacheEnabled": false,
+      "isBuildOnlyTargetAbiEnabled": true,
+      "splitsAbiFilterSet": [],
+      "intermediatesFolder": "/Users/radko93/Repo/react-native-sodium/android/build/intermediates",
+      "gradleModulePathName": ":reactnativelibsodium",
+      "moduleRootFolder": "/Users/radko93/Repo/react-native-sodium/android",
+      "makeFile": "/Users/radko93/Repo/react-native-sodium/android/CMakeLists.txt",
+      "buildSystem": "CMAKE",
+      "compilerSettingsCacheFolder": "/Users/radko93/Repo/react-native-sodium/example/android/.cxx",
+      "cxxFolder": "/Users/radko93/Repo/react-native-sodium/android/.cxx",
+      "ndkFolder": "/Users/radko93/Library/Android/sdk/ndk/19.2.5345600",
+      "ndkVersion": "19.2.5345600",
+      "ndkSupportedAbiList": [
+        "ARMEABI_V7A",
+        "ARM64_V8A",
+        "X86",
+        "X86_64"
+      ],
+      "ndkDefaultAbiList": [
+        "ARMEABI_V7A",
+        "ARM64_V8A",
+        "X86",
+        "X86_64"
+      ],
+      "cmakeToolchainFile": "."
+    },
+    "buildSystemArgumentList": [
+      "-DANDROID_TOOLCHAIN\u003dclang"
+    ],
+    "cFlagList": [],
+    "cppFlagsList": [],
+    "variantName": "release",
+    "soFolder": "/Users/radko93/Repo/react-native-sodium/android/build/intermediates/cmake/release/lib",
+    "objFolder": "/Users/radko93/Repo/react-native-sodium/android/build/intermediates/cmake/release/obj",
+    "jsonFolder": "/Users/radko93/Repo/react-native-sodium/android/.cxx/cmake/release",
+    "gradleBuildOutputFolder": "/Users/radko93/Repo/react-native-sodium/android/.cxx/cxx/release",
+    "isDebuggableEnabled": false,
+    "validAbiList": [
+      "ARMEABI_V7A",
+      "ARM64_V8A",
+      "X86",
+      "X86_64"
+    ],
+    "buildTargetSet": []
+  },
+  "abi": "ARMEABI_V7A",
+  "abiPlatformVersion": 16,
+  "cxxBuildFolder": "/Users/radko93/Repo/react-native-sodium/android/.cxx/cmake/release/armeabi-v7a",
+  "jsonFile": "/Users/radko93/Repo/react-native-sodium/android/.cxx/cmake/release/armeabi-v7a/android_gradle_build.json",
+  "gradleBuildOutputFolder": "/Users/radko93/Repo/react-native-sodium/android/.cxx/cxx/release/armeabi-v7a",
+  "objFolder": "/Users/radko93/Repo/react-native-sodium/android/build/intermediates/cmake/release/obj/armeabi-v7a",
+  "buildCommandFile": "/Users/radko93/Repo/react-native-sodium/android/.cxx/cmake/release/armeabi-v7a/build_command.txt",
+  "buildOutputFile": "/Users/radko93/Repo/react-native-sodium/android/.cxx/cmake/release/armeabi-v7a/build_output.txt",
+  "modelOutputFile": "/Users/radko93/Repo/react-native-sodium/android/.cxx/cmake/release/armeabi-v7a/build_model.json",
+  "cmake": {
+    "cmakeListsWrapperFile": "/Users/radko93/Repo/react-native-sodium/android/.cxx/cxx/release/armeabi-v7a/CMakeLists.txt",
+    "toolchainWrapperFile": "/Users/radko93/Repo/react-native-sodium/android/.cxx/cxx/release/armeabi-v7a/android_gradle_build.toolchain.cmake",
+    "buildGenerationStateFile": "/Users/radko93/Repo/react-native-sodium/android/.cxx/cxx/release/armeabi-v7a/build_generation_state.json",
+    "cacheKeyFile": "/Users/radko93/Repo/react-native-sodium/android/.cxx/cxx/release/armeabi-v7a/compiler_cache_key.json",
+    "compilerCacheUseFile": "/Users/radko93/Repo/react-native-sodium/android/.cxx/cxx/release/armeabi-v7a/compiler_cache_use.json",
+    "compilerCacheWriteFile": "/Users/radko93/Repo/react-native-sodium/android/.cxx/cxx/release/armeabi-v7a/compiler_cache_write.json",
+    "toolchainSettingsFromCacheFile": "/Users/radko93/Repo/react-native-sodium/android/.cxx/cxx/release/armeabi-v7a/compiler_settings_cache.cmake",
+    "cmakeWrappingBaseFolder": "."
+  },
+  "jsonGenerationLoggingRecordFile": "/Users/radko93/Repo/react-native-sodium/android/.cxx/cmake/release/armeabi-v7a/json_generation_record.json",
+  "compileCommandsJsonFile": "/Users/radko93/Repo/react-native-sodium/android/.cxx/cmake/release/armeabi-v7a/compile_commands.json"
+}

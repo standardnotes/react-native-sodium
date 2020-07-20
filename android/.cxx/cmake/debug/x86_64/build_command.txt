@@ -1,0 +1,15 @@
+Executable : /Users/radko93/Library/Android/sdk/cmake/3.6.4111459/bin/cmake
+arguments : 
+-H/Users/radko93/Repo/react-native-sodium/android
+-B/Users/radko93/Repo/react-native-sodium/android/.cxx/cmake/debug/x86_64
+-DANDROID_ABI=x86_64
+-DANDROID_PLATFORM=android-16
+-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=/Users/radko93/Repo/react-native-sodium/android/build/intermediates/cmake/debug/obj/x86_64
+-DCMAKE_BUILD_TYPE=Debug
+-DANDROID_NDK=/Users/radko93/Library/Android/sdk/ndk/19.2.5345600
+-DCMAKE_TOOLCHAIN_FILE=/Users/radko93/Library/Android/sdk/ndk/19.2.5345600/build/cmake/android.toolchain.cmake
+-DCMAKE_MAKE_PROGRAM=/Users/radko93/Library/Android/sdk/cmake/3.6.4111459/bin/ninja
+-GAndroid Gradle - Ninja
+-DANDROID_TOOLCHAIN=clang
+jvmArgs : 
+
