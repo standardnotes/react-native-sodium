@@ -16,6 +16,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.common.MapBuilder;
+import com.facebook.react.common.StandardCharsets;
 
 import org.libsodium.jni.Sodium;
 
@@ -236,7 +237,7 @@ public class RCTSodiumModule extends ReactContextBaseJavaModule {
   @ReactMethod
   public void crypto_aead_xchacha20poly1305_ietf_encrypt(final String message, final String public_nonce, final String key, final String additionalData, final Promise p) {
     try {
-      byte[] m = Base64.decode(message, Base64.NO_WRAP);
+      byte[] m = message.getBytes(StandardCharsets.UTF_8);
       byte[] npub = Base64.decode(public_nonce, Base64.NO_WRAP);
       byte[] k = Base64.decode(key, Base64.NO_WRAP);
 
@@ -247,7 +248,7 @@ public class RCTSodiumModule extends ReactContextBaseJavaModule {
       else if (k.length != Sodium.crypto_aead_xchacha20poly1305_IETF_KEYBYTES())
         p.reject(ESODIUM,ERR_BAD_KEY);
       else {
-        byte[] ad = additionalData != null ? Base64.decode(additionalData, Base64.NO_WRAP) : null;
+        byte[] ad = additionalData != null ? additionalData.getBytes(StandardCharsets.UTF_8) : null;
         int adlen = additionalData != null ? ad.length : 0;
         int[] clen = new int[0];
         byte[] c = new byte[m.length + Sodium.crypto_aead_chacha20poly1305_IETF_ABYTES()];
@@ -276,7 +277,7 @@ public class RCTSodiumModule extends ReactContextBaseJavaModule {
       else if (k.length != Sodium.crypto_aead_xchacha20poly1305_IETF_KEYBYTES())
         p.reject(ESODIUM,ERR_BAD_KEY);
       else {
-        byte[] ad = additionalData != null ? Base64.decode(additionalData, Base64.NO_WRAP) : null;
+        byte[] ad = additionalData != null ? additionalData.getBytes(StandardCharsets.UTF_8) : null;
         int adlen = additionalData != null ? ad.length : 0;
         int[] decrypted_len = new int[1];
         byte[] decrypted = new byte[c.length - Sodium.crypto_aead_chacha20poly1305_IETF_ABYTES()];
@@ -285,7 +286,7 @@ public class RCTSodiumModule extends ReactContextBaseJavaModule {
         if (result != 0)
           p.reject(ESODIUM,ERR_FAILURE);
         else
-          p.resolve(Base64.encodeToString(decrypted,Base64.NO_WRAP));
+          p.resolve(new String(decrypted, StandardCharsets.UTF_8));
       }
     }
     catch (Throwable t) {
@@ -449,7 +450,7 @@ public class RCTSodiumModule extends ReactContextBaseJavaModule {
   public void crypto_pwhash(final Integer keylen, final String password, final String salt, final Integer opslimit, final Integer memlimit, final Integer algo , final Promise p) {
     try {
       byte[] saltb = Base64.decode(salt, Base64.NO_WRAP);
-      byte[] passwordb = Base64.decode(password, Base64.NO_WRAP);
+      byte[] passwordb = password.getBytes(StandardCharsets.UTF_8);
       byte[] out = new byte[keylen];
 
       int result = Sodium.crypto_pwhash(out, out.length, passwordb, passwordb.length, saltb, opslimit, memlimit, algo);

@@ -912,7 +912,7 @@ const App: React.FC = () => {
       Sodium.crypto_aead_xchacha20poly1305_IETF_NPUBBYTES
     );
     const encrypted = await Sodium.crypto_aead_xchacha20poly1305_ietf_encrypt(
-      Base64.encode(message),
+      message,
       nonce,
       key,
       null
@@ -924,7 +924,7 @@ const App: React.FC = () => {
       key,
       null
     );
-    setCryptoXchacha(Base64.decode(decrypted) === message);
+    setCryptoXchacha(decrypted === message);
   };
 
   const startTests = useCallback(() => {
