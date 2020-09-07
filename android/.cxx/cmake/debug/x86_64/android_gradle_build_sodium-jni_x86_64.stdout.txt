@@ -1,6 +1,48 @@
 [1/2] Building C object CMakeFiles/sodium-jni.dir/src/main/cpp/sodium-jni.c.o
-/Users/radko93/Repo/react-native-sodium/android/src/main/cpp/sodium-jni.c:495:10: warning: incompatible pointer to integer conversion returning 'unsigned char *' from a function with result type 'jchar' (aka 'unsigned short') [-Wint-conversion]
+/Users/radko93/Repo/react-native-sodium/android/src/main/cpp/sodium-jni.c:496:10: warning: incompatible pointer to integer conversion returning 'unsigned char *' from a function with result type 'jchar' (aka 'unsigned short') [-Wint-conversion]
   return k;
          ^
-1 warning generated.
+/Users/radko93/Repo/react-native-sodium/android/src/main/cpp/sodium-jni.c:554:55: warning: passing 'unsigned char *' to parameter of type 'const char *' converts between pointers to integer types with different sign [-Wpointer-sign]
+    int result = sodium_base642bin(bin, j_bin_maxlen, b64, j_b64_len, ignore, j_bin_len, j_b64_end, j_variant);
+                                                      ^~~
+../../../../../libsodium/libsodium-android-westmere/include/sodium/utils.h:95:42: note: passing argument to parameter 'b64' here
+                      const char * const b64, const size_t b64_len,
+                                         ^
+/Users/radko93/Repo/react-native-sodium/android/src/main/cpp/sodium-jni.c:554:71: warning: passing 'unsigned char *' to parameter of type 'const char *' converts between pointers to integer types with different sign [-Wpointer-sign]
+    int result = sodium_base642bin(bin, j_bin_maxlen, b64, j_b64_len, ignore, j_bin_len, j_b64_end, j_variant);
+                                                                      ^~~~~~
+../../../../../libsodium/libsodium-android-westmere/include/sodium/utils.h:96:42: note: passing argument to parameter 'ignore' here
+                      const char * const ignore, size_t * const bin_len,
+                                         ^
+/Users/radko93/Repo/react-native-sodium/android/src/main/cpp/sodium-jni.c:565:33: warning: passing 'unsigned char *' to parameter of type 'char *' converts between pointers to integer types with different sign [-Wpointer-sign]
+    int result = sodium_bin2hex(hex, j_hex_maxlen, bin, j_bin_len);
+                                ^~~
+../../../../../libsodium/libsodium-android-westmere/include/sodium/utils.h:60:35: note: passing argument to parameter 'hex' here
+char *sodium_bin2hex(char * const hex, const size_t hex_maxlen,
+                                  ^
+/Users/radko93/Repo/react-native-sodium/android/src/main/cpp/sodium-jni.c:565:9: warning: incompatible pointer to integer conversion initializing 'int' with an expression of type 'char *' [-Wint-conversion]
+    int result = sodium_bin2hex(hex, j_hex_maxlen, bin, j_bin_len);
+        ^        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+/Users/radko93/Repo/react-native-sodium/android/src/main/cpp/sodium-jni.c:579:52: warning: passing 'unsigned char *' to parameter of type 'const char *' converts between pointers to integer types with different sign [-Wpointer-sign]
+    int result = sodium_hex2bin(bin, j_bin_maxlen, hex, j_hex_len, ignore,j_bin_len, j_hex_end);
+                                                   ^~~
+../../../../../libsodium/libsodium-android-westmere/include/sodium/utils.h:66:39: note: passing argument to parameter 'hex' here
+                   const char * const hex, const size_t hex_len,
+                                      ^
+/Users/radko93/Repo/react-native-sodium/android/src/main/cpp/sodium-jni.c:579:68: warning: passing 'unsigned char *' to parameter of type 'const char *' converts between pointers to integer types with different sign [-Wpointer-sign]
+    int result = sodium_hex2bin(bin, j_bin_maxlen, hex, j_hex_len, ignore,j_bin_len, j_hex_end);
+                                                                   ^~~~~~
+../../../../../libsodium/libsodium-android-westmere/include/sodium/utils.h:67:39: note: passing argument to parameter 'ignore' here
+                   const char * const ignore, size_t * const bin_len,
+                                      ^
+/Users/radko93/Repo/react-native-sodium/android/src/main/cpp/sodium-jni.c:591:36: warning: passing 'unsigned char *' to parameter of type 'char *' converts between pointers to integer types with different sign [-Wpointer-sign]
+    int result = sodium_bin2base64(b64, j_b64_maxlen, bin, j_bin_len, j_variant);
+                                   ^~~
+../../../../../libsodium/libsodium-android-westmere/include/sodium/utils.h:89:38: note: passing argument to parameter 'b64' here
+char *sodium_bin2base64(char * const b64, const size_t b64_maxlen,
+                                     ^
+/Users/radko93/Repo/react-native-sodium/android/src/main/cpp/sodium-jni.c:591:9: warning: incompatible pointer to integer conversion initializing 'int' with an expression of type 'char *' [-Wint-conversion]
+    int result = sodium_bin2base64(b64, j_b64_maxlen, bin, j_bin_len, j_variant);
+        ^        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+9 warnings generated.
 [2/2] Linking C shared library ../../../../build/intermediates/cmake/debug/obj/x86_64/libsodium-jni.so

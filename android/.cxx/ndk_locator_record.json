@@ -1,9 +1,9 @@
 {
-  "ndkFolder": "/Users/radko93/Library/Android/sdk/ndk/19.2.5345600",
+  "ndkFolder": "/Users/radko93/Library/Android/sdk/ndk/21.3.6528147",
   "messages": [
     {
       "level": "INFO",
-      "message": "android.ndkVersion from module build.gradle is 19.2.5345600"
+      "message": "android.ndkVersion from module build.gradle is 21.3.6528147"
     },
     {
       "level": "INFO",
@@ -11,7 +11,7 @@
     },
     {
       "level": "INFO",
-      "message": "ANDROID_NDK_HOME environment variable is /Users/radko93/Library/Android/sdk/ndk/19.2.5345600"
+      "message": "ANDROID_NDK_HOME environment variable is /Users/radko93/Library/Android/sdk/ndk/21.3.6528147"
     },
     {
       "level": "INFO",
@@ -23,11 +23,15 @@
     },
     {
       "level": "INFO",
-      "message": "Considering /Users/radko93/Library/Android/sdk/ndk/19.2.5345600 by ANDROID_NDK_HOME"
+      "message": "Considering /Users/radko93/Library/Android/sdk/ndk/21.3.6528147 by ANDROID_NDK_HOME"
     },
     {
       "level": "INFO",
       "message": "Considering /Users/radko93/Library/Android/sdk/ndk-bundle in SDK ndk-bundle folder"
+    },
+    {
+      "level": "INFO",
+      "message": "Considering /Users/radko93/Library/Android/sdk/ndk/21.3.6528147 in SDK ndk folder"
     },
     {
       "level": "INFO",
@@ -39,19 +43,19 @@
     },
     {
       "level": "INFO",
-      "message": "Found 2 NDK folders that matched requested version 19.2.5345600:"
+      "message": "Found 2 NDK folders that matched requested version 21.3.6528147:"
     },
     {
       "level": "INFO",
-      "message": " (1) /Users/radko93/Library/Android/sdk/ndk/19.2.5345600 in SDK ndk folder"
+      "message": " (1) /Users/radko93/Library/Android/sdk/ndk/21.3.6528147 in SDK ndk folder"
     },
     {
       "level": "INFO",
-      "message": " (2) /Users/radko93/Library/Android/sdk/ndk/19.2.5345600 by ANDROID_NDK_HOME"
+      "message": " (2) /Users/radko93/Library/Android/sdk/ndk/21.3.6528147 by ANDROID_NDK_HOME"
     },
     {
       "level": "INFO",
-      "message": "  choosing /Users/radko93/Library/Android/sdk/ndk/19.2.5345600"
+      "message": "  choosing /Users/radko93/Library/Android/sdk/ndk/21.3.6528147"
     }
   ]
 }

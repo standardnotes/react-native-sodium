@@ -14,8 +14,8 @@
       "buildSystem": "CMAKE",
       "compilerSettingsCacheFolder": "/Users/radko93/Repo/react-native-sodium/example/android/.cxx",
       "cxxFolder": "/Users/radko93/Repo/react-native-sodium/android/.cxx",
-      "ndkFolder": "/Users/radko93/Library/Android/sdk/ndk/19.2.5345600",
-      "ndkVersion": "19.2.5345600",
+      "ndkFolder": "/Users/radko93/Library/Android/sdk/ndk/21.3.6528147",
+      "ndkVersion": "21.3.6528147",
       "ndkSupportedAbiList": [
         "ARMEABI_V7A",
         "ARM64_V8A",
