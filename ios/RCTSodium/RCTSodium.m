@@ -67,6 +67,10 @@ RCT_EXPORT_MODULE();
     @"crypto_aead_xchacha20poly1305_IETF_KEYBYTES":@crypto_aead_xchacha20poly1305_IETF_KEYBYTES,
     @"crypto_aead_xchacha20poly1305_IETF_NPUBBYTES":@crypto_aead_xchacha20poly1305_IETF_NPUBBYTES,
     @"crypto_aead_xchacha20poly1305_IETF_NSECBYTES":@crypto_aead_xchacha20poly1305_IETF_NSECBYTES,
+    @"base64_variant_ORIGINAL":@sodium_base64_VARIANT_ORIGINAL,
+    @"base64_variant_VARIANT_ORIGINAL_NO_PADDING":@sodium_base64_VARIANT_ORIGINAL_NO_PADDING,
+    @"base64_variant_VARIANT_URLSAFE":@sodium_base64_VARIANT_URLSAFE,
+    @"base64_variant_VARIANT_URLSAFE_NO_PADDING":@sodium_base64_VARIANT_URLSAFE_NO_PADDING,
   };
 
 }
@@ -535,6 +539,75 @@ RCT_EXPORT_METHOD(crypto_sign_ed25519_sk_to_pk:(NSString*)sk resolve: (RCTPromis
   else {
     resolve([[NSData dataWithBytesNoCopy:pk length:crypto_sign_PUBLICKEYBYTES freeWhenDone:NO]  base64EncodedStringWithOptions:0]);
   }
+}
+
+// *****************************************************************************
+// * Utils
+// *****************************************************************************
+RCT_EXPORT_METHOD(sodium_bin2base64:(NSString*)message variant:(NSNumber * _Nonnull)variant resolve: (RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+{
+    const NSData *m = [message dataUsingEncoding:NSUTF8StringEncoding];
+    
+    if (!m || !variant) reject(ESODIUM, ERR_FAILURE, nil);
+    const size_t max_len = sodium_base64_encoded_len(m.length, [variant intValue]);
+    char * encrypted = (char *) sodium_malloc(max_len);
+    if (!sodium_bin2base64(encrypted, max_len, [m bytes], m.length, [variant intValue]))
+        reject(ESODIUM, ERR_FAILURE, nil);
+    else {
+        resolve([NSString stringWithCString:encrypted encoding:NSUTF8StringEncoding]);
+    }
+}
+
+RCT_EXPORT_METHOD(sodium_base642bin:(NSString*)cipher variant:(NSNumber * _Nonnull)variant resolve: (RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+{
+    const NSData *c = [cipher dataUsingEncoding:NSUTF8StringEncoding];
+    
+    if (!c || !variant) reject(ESODIUM, ERR_FAILURE, nil);
+    
+    // since libsodium doesn't provide the reverse of
+    // sodium_base64_encoded_len(size_t bin_len, int variant)
+    // to estimate bin_maxlen, we set it conservatively to
+    // the size of the base64 representation
+    
+    size_t clen = [c length];
+    unsigned char * const decrypted = (unsigned char * const) sodium_malloc(clen);
+    size_t decrypted_len = [NSNumber numberWithLongLong: clen].unsignedLongLongValue;
+    if (sodium_base642bin(decrypted, clen, [c bytes], clen, NULL, &decrypted_len, NULL, [variant intValue]) != 0)
+        reject(ESODIUM, ERR_FAILURE, nil);
+    else {
+        const NSData *resData = [NSData dataWithBytesNoCopy:decrypted length:decrypted_len freeWhenDone:NO];
+        const NSString *res = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
+        resolve(res);
+    }
+}
+
+RCT_EXPORT_METHOD(sodium_bin2hex:(NSString*)message resolve: (RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+{
+    const NSData *m = [message dataUsingEncoding:NSUTF8StringEncoding]; if (!m) reject(ESODIUM, ERR_FAILURE, nil);
+    size_t hex_maxlen = [m length] * 2 + 1;
+    char * const encrypted = (char * const) sodium_malloc(hex_maxlen);
+    if (!sodium_bin2hex(encrypted, hex_maxlen, [m bytes], [m length]))
+        reject(ESODIUM, ERR_FAILURE, nil);
+    else {
+        resolve([NSString stringWithCString:encrypted encoding:NSUTF8StringEncoding]);
+    }
+}
+
+RCT_EXPORT_METHOD(sodium_hex2bin:(NSString*)cipher resolve: (RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+{
+    const NSData *c = [cipher dataUsingEncoding:NSUTF8StringEncoding];
+    
+    if (!c) reject(ESODIUM, ERR_FAILURE, nil);
+    size_t clen = [c length];
+    unsigned char * const decrypted = (unsigned char * const) sodium_malloc(clen);
+    size_t decrypted_len = [NSNumber numberWithLongLong: clen].unsignedLongLongValue;
+    if (sodium_hex2bin(decrypted, clen, [c bytes], clen, NULL, &decrypted_len, NULL) != 0)
+        reject(ESODIUM, ERR_FAILURE, nil);
+    else {
+        const NSData *resData = [NSData dataWithBytesNoCopy:decrypted length:decrypted_len freeWhenDone:NO];
+        const NSString *res = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
+        resolve(res);
+    }
 }
 
 @end

@@ -119,6 +119,10 @@ export const crypto_sign_PUBLICKEYBYTES: number;
 export const crypto_sign_SECRETKEYBYTES: number;
 export const crypto_sign_SEEDBYTES: number;
 export const randombytes_SEEDBYTES: number;
+export const base64_variant_ORIGINAL: number;
+export const base64_variant_VARIANT_ORIGINAL_NO_PADDING: number;
+export const base64_variant_VARIANT_URLSAFE: number;
+export const base64_variant_VARIANT_URLSAFE_NO_PADDING: number;
 
 export const ready: Promise<void>;
 
@@ -257,3 +261,17 @@ export function randombytes_stir(): void;
 export function randombytes_uniform(upper_bound: number): Promise<number>;
 
 export function sodium_version_string(): Promise<string>;
+
+export function sodium_bin2base64(
+  message: string,
+  variant: number
+): Promise<string>;
+
+export function sodium_base642bin(
+  cipher: string,
+  variant: number
+): Promise<string>;
+
+export function sodium_bin2hex(message: string): Promise<string>;
+
+export function sodium_hex2bin(cipher: string): Promise<string>;

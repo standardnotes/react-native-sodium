@@ -11,7 +11,6 @@ import {
 } from 'react-native';
 
 import base64 from 'base64-js';
-import { Base64 } from 'js-base64';
 import Sodium from 'react-native-sodium';
 
 const TestResult: React.FC<{ value: boolean | undefined; name: string }> = (
@@ -53,6 +52,8 @@ const App: React.FC = () => {
   const [crypto_auth_verify, setCryptoAuthVerify] = React.useState<boolean>();
   const [crypto_box1, setCryptoBox1] = React.useState<boolean>();
   const [crypto_box2, setCryptoBox2] = React.useState<boolean>();
+  const [base64Encryption, setBase64Encryption] = React.useState<boolean>();
+  const [hex, setHex] = React.useState<boolean>();
   const [crypto_aead_xchacha20poly1305_ietf, setCryptoXchacha] = React.useState<
     boolean
   >();
@@ -927,6 +928,28 @@ const App: React.FC = () => {
     setCryptoXchacha(decrypted === message);
   };
 
+  const testBase64 = async () => {
+    setBase64Encryption(undefined);
+    const message = 'Test message fdsfsdfsdgdfgxdvxbfd';
+    const encrypted = await Sodium.sodium_bin2base64(
+      message,
+      Sodium.base64_variant_ORIGINAL
+    );
+    const decrypted = await Sodium.sodium_base642bin(
+      encrypted,
+      Sodium.base64_variant_ORIGINAL
+    );
+    setBase64Encryption(decrypted === message);
+  };
+
+  const testHex = async () => {
+    setHex(undefined);
+    const message = 'Test message fdsfsdfsdgdfgxdvxbfd';
+    const encrypted = await Sodium.sodium_bin2hex(message);
+    const decrypted = await Sodium.sodium_hex2bin(encrypted);
+    setHex(decrypted === message);
+  };
+
   const startTests = useCallback(() => {
     Sodium.sodium_version_string()
       .then((version) => setSodiumVersion(version))
@@ -946,6 +969,8 @@ const App: React.FC = () => {
     // // Public-key cryptography - authenticated encryption
     // _testBox1();
     // _testBox2();
+    testBase64();
+    testHex();
     _testXchachaEncryption();
   }, []);
 
@@ -974,6 +999,8 @@ const App: React.FC = () => {
         <TestResult name="crypto_auth_verify" value={crypto_auth_verify} />
         <TestResult name="crypto_box1" value={crypto_box1} />
         <TestResult name="crypto_box2" value={crypto_box2} />
+        <TestResult name="base64" value={base64Encryption} />
+        <TestResult name="hex" value={hex} />
         <TestResult
           name="crypto_aead_xchacha20poly1305_ietf"
           value={crypto_aead_xchacha20poly1305_ietf}
