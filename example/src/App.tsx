@@ -930,12 +930,12 @@ const App: React.FC = () => {
 
   const testBase64 = async () => {
     setBase64Encryption(undefined);
-    const message = 'Test message fdsfsdfsdgdfgxdvxbfd';
-    const encrypted = await Sodium.sodium_bin2base64(
+    const message = 'Hello world';
+    const encrypted = await Sodium.to_base64(
       message,
       Sodium.base64_variant_ORIGINAL
     );
-    const decrypted = await Sodium.sodium_base642bin(
+    const decrypted = await Sodium.from_base64(
       encrypted,
       Sodium.base64_variant_ORIGINAL
     );
@@ -944,9 +944,9 @@ const App: React.FC = () => {
 
   const testHex = async () => {
     setHex(undefined);
-    const message = 'Test message fdsfsdfsdgdfgxdvxbfd';
-    const encrypted = await Sodium.sodium_bin2hex(message);
-    const decrypted = await Sodium.sodium_hex2bin(encrypted);
+    const message = 'THello world';
+    const encrypted = await Sodium.to_hex(message);
+    const decrypted = await Sodium.from_hex(encrypted);
     setHex(decrypted === message);
   };
 

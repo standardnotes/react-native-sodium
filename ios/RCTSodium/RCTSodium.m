@@ -239,8 +239,10 @@ RCT_EXPORT_METHOD(crypto_aead_xchacha20poly1305_ietf_encrypt:(NSString*)message 
             int result = crypto_aead_xchacha20poly1305_ietf_encrypt(c, &clen, [m bytes], m.length, ad ? [ad bytes] : NULL, adlen, NULL, [npub bytes], [k bytes]);
             if (result != 0)
                 reject(ESODIUM,ERR_FAILURE,nil);
-            else
-                resolve([[NSData dataWithBytesNoCopy:c length:clen freeWhenDone:NO]  base64EncodedStringWithOptions:0]);
+            else {
+                NSData *resultData = [NSData dataWithBytesNoCopy:c length:clen freeWhenDone:NO];
+                resolve([self binToBase64:resultData variant:[NSNumber numberWithInt:sodium_base64_VARIANT_ORIGINAL]]);
+            }
             sodium_free(c);
         }
     }
@@ -622,10 +624,10 @@ RCT_EXPORT_METHOD(sodium_hex2bin:(NSString*)cipher resolve: (RCTPromiseResolveBl
         return nil;
     } else {
         const size_t max_len = sodium_base64_encoded_len(bin.length, [variant intValue]);
-        char * encrypted = (char *) sodium_malloc(max_len);
+        char * encoded = (char *) sodium_malloc(max_len);
         @try {
-            sodium_bin2base64(encrypted, max_len, [bin bytes], bin.length, [variant intValue]);
-            NSString *res = [NSString stringWithCString:encrypted encoding:NSUTF8StringEncoding];
+            sodium_bin2base64(encoded, max_len, [bin bytes], bin.length, [variant intValue]);
+            NSString *res = [NSString stringWithCString:encoded encoding:NSUTF8StringEncoding];
             return res;
         }
         @catch (NSException *exception) {
@@ -645,12 +647,12 @@ RCT_EXPORT_METHOD(sodium_hex2bin:(NSString*)cipher resolve: (RCTPromiseResolveBl
         // the size of the base64 representation
         
         size_t clen = [c length];
-        unsigned char * const decrypted = (unsigned char * const) sodium_malloc(clen);
-        size_t decrypted_len = [NSNumber numberWithLongLong: clen].unsignedLongLongValue;
-        if (sodium_base642bin(decrypted, clen, [c bytes], clen, NULL, &decrypted_len, NULL, [variant intValue]) != 0)
+        unsigned char * const decoded = (unsigned char * const) sodium_malloc(clen);
+        size_t decoded_len = [NSNumber numberWithLongLong: clen].unsignedLongLongValue;
+        if (sodium_base642bin(decoded, clen, [c bytes], clen, NULL, &decoded_len, NULL, [variant intValue]) != 0)
             return nil;
         else {
-            return [NSData dataWithBytesNoCopy:decrypted length:decrypted_len freeWhenDone:NO];
+            return [NSData dataWithBytesNoCopy:decoded length:decoded_len freeWhenDone:NO];
         }
     }
     return nil;
@@ -658,10 +660,10 @@ RCT_EXPORT_METHOD(sodium_hex2bin:(NSString*)cipher resolve: (RCTPromiseResolveBl
 
 - (NSString * __strong) binToHex:(NSData*)bin {
     size_t hex_maxlen = [bin length] * 2 + 1;
-    char * const encrypted = (char * const) sodium_malloc(hex_maxlen);
+    char * const encoded = (char * const) sodium_malloc(hex_maxlen);
     @try {
-        sodium_bin2hex(encrypted, hex_maxlen, [bin bytes], [bin length]);
-        return [NSString stringWithCString:encrypted encoding:NSUTF8StringEncoding];
+        sodium_bin2hex(encoded, hex_maxlen, [bin bytes], [bin length]);
+        return [NSString stringWithCString:encoded encoding:NSUTF8StringEncoding];
     }
     @catch (NSException *exception) {
         return nil;
@@ -672,13 +674,13 @@ RCT_EXPORT_METHOD(sodium_hex2bin:(NSString*)cipher resolve: (RCTPromiseResolveBl
     const NSData *h = [hex dataUsingEncoding:NSUTF8StringEncoding];
     
     size_t clen = [h length];
-    unsigned char * const decrypted = (unsigned char * const) sodium_malloc(clen);
-    size_t decrypted_len = [NSNumber numberWithLongLong: clen].unsignedLongLongValue;
-    if (sodium_hex2bin(decrypted, clen, [h bytes], clen, NULL, &decrypted_len, NULL) != 0) {
+    unsigned char * const encoded = (unsigned char * const) sodium_malloc(clen);
+    size_t decoded_len = [NSNumber numberWithLongLong: clen].unsignedLongLongValue;
+    if (sodium_hex2bin(encoded, clen, [h bytes], clen, NULL, &decoded_len, NULL) != 0) {
         return nil;
     }
     else {
-        return [NSData dataWithBytesNoCopy:decrypted length:decrypted_len freeWhenDone:NO];
+        return [NSData dataWithBytesNoCopy:encoded length:decoded_len freeWhenDone:NO];
     }
 }
 
