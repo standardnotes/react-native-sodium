@@ -251,6 +251,7 @@ export function crypto_sign_verify_detached(
 ): Promise<boolean>;
 
 export function randombytes_buf(length: number): Promise<string>;
+export function randombytes_buf_b64(length: number): Promise<string>;
 
 export function randombytes_close(): void;
 
@@ -262,16 +263,10 @@ export function randombytes_uniform(upper_bound: number): Promise<number>;
 
 export function sodium_version_string(): Promise<string>;
 
-export function sodium_bin2base64(
-  message: string,
-  variant: number
-): Promise<string>;
+export function to_base64(message: string, variant: number): Promise<string>;
 
-export function sodium_base642bin(
-  cipher: string,
-  variant: number
-): Promise<string>;
+export function from_base64(cipher: string, variant: number): Promise<string>;
 
-export function sodium_bin2hex(message: string): Promise<string>;
+export function to_hex(message: string): Promise<string>;
 
-export function sodium_hex2bin(cipher: string): Promise<string>;
+export function from_hex(cipher: string): Promise<string>;
