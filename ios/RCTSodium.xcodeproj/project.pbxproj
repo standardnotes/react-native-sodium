@@ -44,7 +44,6 @@
 		382804091D980AC000DD9014 /* libRCTSodium.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libRCTSodium.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		3828040C1D980AC000DD9014 /* RCTSodium.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCTSodium.h; sourceTree = "<group>"; };
 		3828040E1D980AC000DD9014 /* RCTSodium.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCTSodium.m; sourceTree = "<group>"; };
-		387375C71D9ED09100AE562A /* libsodium-ios */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "libsodium-ios"; path = "../libsodium/libsodium-ios"; sourceTree = "<group>"; };
 		387375C81D9ED0C300AE562A /* libsodium.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libsodium.a; path = "../libsodium/libsodium-ios/lib/libsodium.a"; sourceTree = "<group>"; };
 		387375CA1D9ED0D600AE562A /* sodium.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = sodium.h; path = "../libsodium/libsodium-ios/include/sodium.h"; sourceTree = "<group>"; };
 		387375CC1D9ED0E200AE562A /* sodium */ = {isa = PBXFileReference; lastKnownFileType = folder; name = sodium; path = "../libsodium/libsodium-ios/include/sodium"; sourceTree = "<group>"; };
@@ -68,7 +67,6 @@
 				387375CC1D9ED0E200AE562A /* sodium */,
 				387375CA1D9ED0D600AE562A /* sodium.h */,
 				387375C81D9ED0C300AE562A /* libsodium.a */,
-				387375C71D9ED09100AE562A /* libsodium-ios */,
 				3828040B1D980AC000DD9014 /* RCTSodium */,
 				3828040A1D980AC000DD9014 /* Products */,
 			);
@@ -131,6 +129,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 			);
 			mainGroup = 382804001D980AC000DD9014;

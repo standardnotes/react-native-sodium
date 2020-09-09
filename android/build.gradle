@@ -1,24 +1,34 @@
 buildscript {
-    repositories {
-        google()
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.2'
-    }
+  // Buildscript is evaluated before everything else so we can't use getExtOrDefault
+
+  repositories {
+    google()
+    jcenter()
+  }
+
+  dependencies {
+    classpath 'com.android.tools.build:gradle:3.4.2'
+  }
 }
 
 apply plugin: 'com.android.library'
 
+def getExtOrDefault(name) {
+  return rootProject.ext.has(name) ? rootProject.ext.get(name) : project.properties['Libsodium_' + name]
+}
+
+def getExtOrIntegerDefault(name) {
+  return rootProject.ext.has(name) ? rootProject.ext.get(name) : (project.properties['Libsodium_' + name]).toInteger()
+}
+
 android {
-    compileSdkVersion 28
-    buildToolsVersion "28.0.3"
+    compileSdkVersion getExtOrIntegerDefault('compileSdkVersion')
+    buildToolsVersion getExtOrDefault('buildToolsVersion')
     defaultConfig {
         minSdkVersion 16
-        compileSdkVersion 28
-        targetSdkVersion 28
+        targetSdkVersion getExtOrIntegerDefault('targetSdkVersion')
         versionCode 1
-        versionName "0.1"
+        versionName "1.0"
         externalNativeBuild {
             cmake {
                 arguments "-DANDROID_TOOLCHAIN=clang"
@@ -34,6 +44,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    ndkVersion '21.3.6528147'
     externalNativeBuild {
         cmake {
             path "CMakeLists.txt"

@@ -1,0 +1,21 @@
+{
+  "buildFiles": [
+    "/Users/radko93/Repo/react-native-sodium/android/CMakeLists.txt"
+  ],
+  "cleanCommands": [
+    "/Users/radko93/Library/Android/sdk/cmake/3.6.4111459/bin/cmake --build /Users/radko93/Repo/react-native-sodium/android/.cxx/cmake/debug/armeabi-v7a --target clean"
+  ],
+  "libraries": {
+    "sodium-Debug-armeabi-v7a": {
+      "artifactName": "sodium",
+      "abi": "armeabi-v7a",
+      "output": "/Users/radko93/Repo/react-native-sodium/android/../libsodium/libsodium-android-armv7-a/lib/libsodium.so"
+    },
+    "sodium-jni-Debug-armeabi-v7a": {
+      "artifactName": "sodium-jni",
+      "buildCommand": "/Users/radko93/Library/Android/sdk/cmake/3.6.4111459/bin/cmake --build /Users/radko93/Repo/react-native-sodium/android/.cxx/cmake/debug/armeabi-v7a --target sodium-jni",
+      "abi": "armeabi-v7a",
+      "output": "/Users/radko93/Repo/react-native-sodium/android/build/intermediates/cmake/debug/obj/armeabi-v7a/libsodium-jni.so"
+    }
+  }
+}

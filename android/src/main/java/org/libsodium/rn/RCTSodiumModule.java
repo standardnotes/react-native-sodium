@@ -1,8 +1,8 @@
 package org.libsodium.rn;
 
 /**
-* Created by Lyubomir Ivanov on 21/09/16.
-*/
+ * Created by Lyubomir Ivanov on 21/09/16.
+ */
 
 import java.util.Map;
 import java.util.HashMap;
@@ -16,6 +16,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.WritableNativeMap;
 import com.facebook.react.common.MapBuilder;
+import com.facebook.react.common.StandardCharsets;
 
 import org.libsodium.jni.Sodium;
 
@@ -42,34 +43,42 @@ public class RCTSodiumModule extends ReactContextBaseJavaModule {
 
   @Override
   public Map<String, Object> getConstants() {
-     final Map<String, Object> constants = new HashMap<>();
-     constants.put("crypto_secretbox_KEYBYTES", Sodium.crypto_secretbox_keybytes());
-     constants.put("crypto_secretbox_NONCEBYTES", Sodium.crypto_secretbox_noncebytes());
-     constants.put("crypto_secretbox_MACBYTES", Sodium.crypto_secretbox_macbytes());
-     constants.put("crypto_auth_KEYBYTES", Sodium.crypto_auth_keybytes());
-     constants.put("crypto_auth_BYTES", Sodium.crypto_auth_bytes());
-     constants.put("crypto_box_PUBLICKEYBYTES", Sodium.crypto_box_publickeybytes());
-     constants.put("crypto_box_SECRETKEYBYTES", Sodium.crypto_box_secretkeybytes());
-     constants.put("crypto_box_NONCEBYTES", Sodium.crypto_box_noncebytes());
-     constants.put("crypto_box_MACBYTES", Sodium.crypto_box_macbytes());
-     constants.put("crypto_box_ZEROBYTES", Sodium.crypto_box_zerobytes());
-     constants.put("crypto_box_SEALBYTES", Sodium.crypto_box_sealbytes());
-     constants.put("crypto_sign_PUBLICKEYBYTES", Sodium.crypto_sign_publickeybytes());
-     constants.put("crypto_sign_SECRETKEYBYTES", Sodium.crypto_sign_secretkeybytes());
-     constants.put("crypto_sign_SEEDBYTES", Sodium.crypto_sign_seedbytes());
-     constants.put("crypto_sign_BYTES", Sodium.crypto_sign_bytes());
-     constants.put("crypto_pwhash_SALTBYTES", Sodium.crypto_pwhash_salt_bytes());
-     constants.put("crypto_pwhash_OPSLIMIT_MODERATE", Sodium.crypto_pwhash_opslimit_moderate());
-     constants.put("crypto_pwhash_OPSLIMIT_MIN", Sodium.crypto_pwhash_opslimit_min());
-     constants.put("crypto_pwhash_OPSLIMIT_MAX", Sodium.crypto_pwhash_opslimit_max());
-     constants.put("crypto_pwhash_MEMLIMIT_MODERATE", Sodium.crypto_pwhash_memlimit_moderate());
-     constants.put("crypto_pwhash_MEMLIMIT_MIN", Sodium.crypto_pwhash_memlimit_min());
-     constants.put("crypto_pwhash_MEMLIMIT_MAX", Sodium.crypto_pwhash_memlimit_max());
-     constants.put("crypto_pwhash_ALG_DEFAULT", Sodium.crypto_pwhash_algo_default());
-     constants.put("crypto_pwhash_ALG_ARGON2I13", Sodium.crypto_pwhash_algo_argon2i13());
-     constants.put("crypto_pwhash_ALG_ARGON2ID13", Sodium.crypto_pwhash_algo_argon2id13());
+    final Map<String, Object> constants = new HashMap<>();
+    constants.put("crypto_secretbox_KEYBYTES", Sodium.crypto_secretbox_keybytes());
+    constants.put("crypto_secretbox_NONCEBYTES", Sodium.crypto_secretbox_noncebytes());
+    constants.put("crypto_secretbox_MACBYTES", Sodium.crypto_secretbox_macbytes());
+    constants.put("crypto_auth_KEYBYTES", Sodium.crypto_auth_keybytes());
+    constants.put("crypto_auth_BYTES", Sodium.crypto_auth_bytes());
+    constants.put("crypto_box_PUBLICKEYBYTES", Sodium.crypto_box_publickeybytes());
+    constants.put("crypto_box_SECRETKEYBYTES", Sodium.crypto_box_secretkeybytes());
+    constants.put("crypto_box_NONCEBYTES", Sodium.crypto_box_noncebytes());
+    constants.put("crypto_box_MACBYTES", Sodium.crypto_box_macbytes());
+    constants.put("crypto_box_ZEROBYTES", Sodium.crypto_box_zerobytes());
+    constants.put("crypto_box_SEALBYTES", Sodium.crypto_box_sealbytes());
+    constants.put("crypto_sign_PUBLICKEYBYTES", Sodium.crypto_sign_publickeybytes());
+    constants.put("crypto_sign_SECRETKEYBYTES", Sodium.crypto_sign_secretkeybytes());
+    constants.put("crypto_sign_SEEDBYTES", Sodium.crypto_sign_seedbytes());
+    constants.put("crypto_sign_BYTES", Sodium.crypto_sign_bytes());
+    constants.put("crypto_pwhash_SALTBYTES", Sodium.crypto_pwhash_salt_bytes());
+    constants.put("crypto_pwhash_OPSLIMIT_MODERATE", Sodium.crypto_pwhash_opslimit_moderate());
+    constants.put("crypto_pwhash_OPSLIMIT_MIN", Sodium.crypto_pwhash_opslimit_min());
+    constants.put("crypto_pwhash_OPSLIMIT_MAX", Sodium.crypto_pwhash_opslimit_max());
+    constants.put("crypto_pwhash_MEMLIMIT_MODERATE", Sodium.crypto_pwhash_memlimit_moderate());
+    constants.put("crypto_pwhash_MEMLIMIT_MIN", Sodium.crypto_pwhash_memlimit_min());
+    constants.put("crypto_pwhash_MEMLIMIT_MAX", Sodium.crypto_pwhash_memlimit_max());
+    constants.put("crypto_pwhash_ALG_DEFAULT", Sodium.crypto_pwhash_algo_default());
+    constants.put("crypto_pwhash_ALG_ARGON2I13", Sodium.crypto_pwhash_algo_argon2i13());
+    constants.put("crypto_pwhash_ALG_ARGON2ID13", Sodium.crypto_pwhash_algo_argon2id13());
+    constants.put("crypto_aead_xchacha20poly1305_IETF_ABYTES", Sodium.crypto_aead_chacha20poly1305_IETF_ABYTES());
+    constants.put("crypto_aead_xchacha20poly1305_IETF_KEYBYTES", Sodium.crypto_aead_xchacha20poly1305_IETF_KEYBYTES());
+    constants.put("crypto_aead_xchacha20poly1305_IETF_NPUBBYTES", Sodium.crypto_aead_xchacha20poly1305_IETF_NPUBBYTES());
+    constants.put("crypto_aead_xchacha20poly1305_IETF_NSECBYTES", Sodium.crypto_aead_xchacha20poly1305_IETF_NSECBYTES());
+    constants.put("base64_variant_ORIGINAL", Sodium.base64_variant_ORIGINAL());
+    constants.put("base64_variant_VARIANT_ORIGINAL_NO_PADDING", Sodium.base64_variant_VARIANT_ORIGINAL_NO_PADDING());
+    constants.put("base64_variant_VARIANT_URLSAFE", Sodium.base64_variant_VARIANT_URLSAFE());
+    constants.put("base64_variant_VARIANT_URLSAFE_NO_PADDING", Sodium.base64_variant_VARIANT_URLSAFE_NO_PADDING());
 
-     return constants;
+    return constants;
   }
 
   // ***************************************************************************
@@ -100,7 +109,7 @@ public class RCTSodiumModule extends ReactContextBaseJavaModule {
     try {
       byte[] buf = new byte[size];
       Sodium.randombytes_buf(buf, size);
-      p.resolve(Base64.encodeToString(buf,Base64.NO_WRAP));
+      p.resolve(this.binToHex(buf));
     }
     catch (Throwable t) {
       p.reject(ESODIUM,ERR_FAILURE,t);
@@ -210,6 +219,78 @@ public class RCTSodiumModule extends ReactContextBaseJavaModule {
       else {
         int result = Sodium.crypto_auth_verify(hb, inb, inb.length, kb);
         p.resolve(result);
+      }
+    }
+    catch (Throwable t) {
+      p.reject(ESODIUM,ERR_FAILURE,t);
+    }
+  }
+
+  // ***************************************************************************
+  // * Public-key cryptography - XChaCha20-Poly1305 encryption
+  // ***************************************************************************
+
+  @ReactMethod
+  public void crypto_aead_xchacha20poly1305_ietf_keygen(final Promise p) {
+    byte[] k = new byte[Sodium.crypto_aead_xchacha20poly1305_IETF_KEYBYTES()];
+    Sodium.crypto_aead_xchacha20poly1305_ietf_keygen(k);
+    String s = Base64.encodeToString(k, Base64.NO_WRAP);
+    p.resolve(s);
+  }
+
+  @ReactMethod
+  public void crypto_aead_xchacha20poly1305_ietf_encrypt(final String message, final String public_nonce, final String key, final String additionalData, final Promise p) {
+    try {
+      byte[] m = message.getBytes(StandardCharsets.UTF_8);
+      byte[] npub = this.hexToBin(public_nonce);
+      byte[] k = this.hexToBin(key);
+
+      if (m.length <= 0)
+        p.reject(ESODIUM,ERR_FAILURE);
+      else if (npub.length != Sodium.crypto_aead_xchacha20poly1305_IETF_NPUBBYTES())
+        p.reject(ESODIUM,ERR_BAD_NONCE);
+      else if (k.length != Sodium.crypto_aead_xchacha20poly1305_IETF_KEYBYTES())
+        p.reject(ESODIUM,ERR_BAD_KEY);
+      else {
+        byte[] ad = additionalData != null ? additionalData.getBytes(StandardCharsets.UTF_8) : null;
+        int adlen = additionalData != null ? ad.length : 0;
+        int[] clen = new int[0];
+        byte[] c = new byte[m.length + Sodium.crypto_aead_chacha20poly1305_IETF_ABYTES()];
+        int result = Sodium.crypto_aead_xchacha20poly1305_ietf_encrypt(c, clen, m, m.length, ad, adlen, null, npub, k);
+        if (result != 0)
+          p.reject(ESODIUM,ERR_FAILURE);
+        else
+          p.resolve(this.binToBase64(c, Sodium.base64_variant_VARIANT_ORIGINAL_NO_PADDING()));
+      }
+    }
+    catch (Throwable t) {
+      p.reject(ESODIUM,ERR_FAILURE,t);
+    }
+  }
+
+  @ReactMethod
+  public void crypto_aead_xchacha20poly1305_ietf_decrypt(final String cipherText, final String public_nonce, final String key, final String additionalData, final Promise p) {
+    try {
+      byte[] c = this.base64ToBin(cipherText, Sodium.base64_variant_VARIANT_ORIGINAL_NO_PADDING());
+      byte[] npub = this.hexToBin(public_nonce);
+      byte[] k = this.hexToBin(key);
+      if (c.length <= 0)
+        p.reject(ESODIUM,ERR_FAILURE);
+      else if (npub.length != Sodium.crypto_aead_xchacha20poly1305_IETF_NPUBBYTES())
+        p.reject(ESODIUM,ERR_BAD_NONCE);
+      else if (k.length != Sodium.crypto_aead_xchacha20poly1305_IETF_KEYBYTES())
+        p.reject(ESODIUM,ERR_BAD_KEY);
+      else {
+        byte[] ad = additionalData != null ? additionalData.getBytes(StandardCharsets.UTF_8) : null;
+        int adlen = additionalData != null ? ad.length : 0;
+        int[] decrypted_len = new int[1];
+        byte[] decrypted = new byte[c.length - Sodium.crypto_aead_chacha20poly1305_IETF_ABYTES()];
+
+        int result = Sodium.crypto_aead_xchacha20poly1305_ietf_decrypt(decrypted, decrypted_len, null, c, c.length, ad, adlen, npub, k);
+        if (result != 0)
+          p.reject(ESODIUM,ERR_FAILURE);
+        else
+          p.resolve(new String(decrypted, StandardCharsets.UTF_8));
       }
     }
     catch (Throwable t) {
@@ -372,15 +453,15 @@ public class RCTSodiumModule extends ReactContextBaseJavaModule {
   @ReactMethod
   public void crypto_pwhash(final Integer keylen, final String password, final String salt, final Integer opslimit, final Integer memlimit, final Integer algo , final Promise p) {
     try {
-      byte[] saltb = Base64.decode(salt, Base64.NO_WRAP);
-      byte[] passwordb = Base64.decode(password, Base64.NO_WRAP);
+      byte[] saltb = this.hexToBin(salt);
+      byte[] passwordb = password.getBytes(StandardCharsets.UTF_8);
       byte[] out = new byte[keylen];
-      
+
       int result = Sodium.crypto_pwhash(out, out.length, passwordb, passwordb.length, saltb, opslimit, memlimit, algo);
       if (result != 0)
         p.reject(ESODIUM,ERR_FAILURE);
       else
-        p.resolve(Base64.encodeToString(out, Base64.NO_WRAP));
+        p.resolve(this.binToHex(out));
     }
     catch (Throwable t) {
       p.reject(ESODIUM,ERR_FAILURE,t);
@@ -634,6 +715,129 @@ public class RCTSodiumModule extends ReactContextBaseJavaModule {
     }
     catch(Throwable t) {
       p.reject(ESODIUM, ERR_FAILURE, t);
+    }
+  }
+
+  // ***************************************************************************
+  // * Utils
+  // ***************************************************************************
+
+  @ReactMethod
+  public void to_base64(final String message, final int variant, final Promise p) {
+    byte[] m = message.getBytes(StandardCharsets.UTF_8);
+    String result = this.binToBase64(m, variant);
+    if (result == null) {
+      p.reject(ESODIUM,ERR_FAILURE);
+    } else {
+      p.resolve(result);
+    }
+  }
+
+  @ReactMethod
+  public void from_base64(final String cipher, final int variant, final Promise p) {
+    byte[] result = this.base64ToBin(cipher, variant);
+    if (result == null) {
+      p.reject(ESODIUM,ERR_FAILURE);
+    } else {
+      p.resolve(new String(result, StandardCharsets.UTF_8));
+    }
+  }
+
+  @ReactMethod
+  public void to_hex(final String message, final Promise p) {
+    byte[] m = message.getBytes(StandardCharsets.UTF_8);
+    String result = this.binToHex(m);
+    if (result == null) {
+      p.reject(ESODIUM,ERR_FAILURE);
+    } else {
+      p.resolve(result);
+    }
+  }
+
+  @ReactMethod
+  public void from_hex(final String cipher, final Promise p) {
+    byte[] result = this.hexToBin(cipher);
+    if (result == null) {
+      p.reject(ESODIUM,ERR_FAILURE);
+    } else {
+      p.resolve(new String(result, StandardCharsets.UTF_8));
+    }
+  }
+
+  private String binToBase64(final byte[] data, final int variant) {
+    try {
+      if (data.length <= 0 || variant == 0)
+        return null;
+      else {
+        int encoded_len = Sodium.sodium_base64_encoded_len(data.length, variant);
+        byte[] encoded = new byte[encoded_len];
+        Sodium.sodium_bin2base64(encoded, encoded_len, data, data.length, variant);
+        return new String(encoded, StandardCharsets.UTF_8);
+      }
+    }
+    catch (Throwable t) {
+      return null;
+    }
+  }
+
+  private byte[] base64ToBin(String cipher, final int variant) {
+    try {
+      byte[] c = cipher.getBytes(StandardCharsets.UTF_8);
+
+      if (c.length <= 0 || variant == 0)
+        return null;
+
+      else {
+        int blen = c.length;
+        byte[] decoded = new byte[blen];
+        int[] decoded_len = new int[1];
+        int result = Sodium.sodium_base642bin(decoded, blen, c, c.length, null, decoded_len, null, variant);
+        if (result != 0)
+          return null;
+        else
+          return decoded;
+      }
+    }
+    catch (Throwable t) {
+      return null;
+    }
+  }
+
+  private String binToHex(final byte[] data) {
+    try {
+      if (data.length <= 0)
+        return null;
+
+      else {
+        int encoded_len = data.length * 2 + 1;
+        byte[] encoded = new byte[encoded_len];
+        Sodium.sodium_bin2hex(encoded, encoded_len, data, data.length);
+        return new String(encoded, StandardCharsets.UTF_8);
+      }
+    } catch (Throwable t) {
+      return null;
+    }
+  }
+
+  private byte[] hexToBin(String cipher) {
+    try {
+      byte[] c = cipher.getBytes(StandardCharsets.UTF_8);
+
+      if (c.length <= 0)
+        return null;
+
+      else {
+        int blen = c.length;
+        byte[] decoded = new byte[blen];
+        int[] decoded_len = new int[1];
+        int result = Sodium.sodium_hex2bin(decoded, blen, c, c.length, null, decoded_len, null);
+        if (result != 0)
+          return null;
+        else
+          return decoded;
+      }
+    } catch (Throwable t) {
+      return null;
     }
   }
 }
