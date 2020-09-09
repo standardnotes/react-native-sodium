@@ -72,7 +72,7 @@ RCT_EXPORT_MODULE();
         @"base64_variant_VARIANT_URLSAFE":@sodium_base64_VARIANT_URLSAFE,
         @"base64_variant_VARIANT_URLSAFE_NO_PADDING":@sodium_base64_VARIANT_URLSAFE_NO_PADDING,
     };
-    
+
 }
 
 + (BOOL)requiresMainQueueSetup
@@ -111,20 +111,6 @@ RCT_EXPORT_METHOD(randombytes_buf:(NSUInteger)size resolve:(RCTPromiseResolveBlo
         randombytes_buf(buf,(u_int32_t)size);
         NSData *data = [NSData dataWithBytesNoCopy:buf length:size freeWhenDone:NO];
         const NSString *res = [self binToHex:data];
-        resolve(res);
-        sodium_free(buf);
-    }
-}
-
-RCT_EXPORT_METHOD(randombytes_buf_b64:(NSUInteger)size resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
-{
-    unsigned char *buf = (unsigned char *) sodium_malloc((u_int32_t)size);
-    if (buf == NULL)
-        reject(ESODIUM,ERR_FAILURE,nil);
-    else {
-        randombytes_buf(buf,(u_int32_t)size);
-        NSData *data = [NSData dataWithBytesNoCopy:buf length:size freeWhenDone:NO];
-        const NSString *res = [self binToBase64:data variant:[NSNumber numberWithInt:sodium_base64_VARIANT_ORIGINAL]];
         resolve(res);
         sodium_free(buf);
     }
@@ -190,7 +176,7 @@ RCT_EXPORT_METHOD(crypto_secretbox_open_easy:(NSString*)c n:(NSString*)n k:(NSSt
 RCT_EXPORT_METHOD(crypto_auth:(NSString*)in k:(NSString*)k resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 {
     unsigned char out[crypto_auth_BYTES];
-    
+
     const NSData *din = [[NSData alloc] initWithBase64EncodedString:in options:0];
     const NSData *dk = [[NSData alloc] initWithBase64EncodedString:k options:0];
     if (!din || !dk) reject(ESODIUM,ERR_FAILURE,nil);
@@ -223,15 +209,15 @@ RCT_EXPORT_METHOD(crypto_aead_xchacha20poly1305_ietf_encrypt:(NSString*)message 
     const NSData *m = [message dataUsingEncoding:NSUTF8StringEncoding];
     const NSData *npub = [self hexToBin:public_nonce];
     const NSData *k = [self hexToBin:key];
-    
+
     if (!m || !npub || !k) reject(ESODIUM,ERR_FAILURE,nil);
     else if (npub.length != crypto_aead_xchacha20poly1305_ietf_NPUBBYTES) reject(ESODIUM,ERR_BAD_NONCE,nil);
     else if (k.length != crypto_aead_xchacha20poly1305_IETF_KEYBYTES) reject(ESODIUM,ERR_BAD_KEY,nil);
-    
+
     else {
         unsigned long long clen = crypto_aead_chacha20poly1305_IETF_ABYTES + m.length;
         unsigned char *c = (unsigned char *) sodium_malloc(clen);
-        
+
         const NSData *ad = additionalData ? [additionalData dataUsingEncoding:NSUTF8StringEncoding] : NULL;
         unsigned long adlen = additionalData ? ad.length : 0;
         if (c == NULL) reject(ESODIUM,ERR_FAILURE,nil);
@@ -241,7 +227,7 @@ RCT_EXPORT_METHOD(crypto_aead_xchacha20poly1305_ietf_encrypt:(NSString*)message 
                 reject(ESODIUM,ERR_FAILURE,nil);
             else {
                 NSData *resultData = [NSData dataWithBytesNoCopy:c length:clen freeWhenDone:NO];
-                resolve([self binToBase64:resultData variant:[NSNumber numberWithInt:sodium_base64_VARIANT_ORIGINAL]]);
+                resolve([self binToBase64:resultData variant:[NSNumber numberWithInt:sodium_base64_VARIANT_ORIGINAL_NO_PADDING]]);
             }
             sodium_free(c);
         }
@@ -250,7 +236,7 @@ RCT_EXPORT_METHOD(crypto_aead_xchacha20poly1305_ietf_encrypt:(NSString*)message 
 
 RCT_EXPORT_METHOD(crypto_aead_xchacha20poly1305_ietf_decrypt:(NSString*)cipherText public_nonce:(NSString*)public_nonce key:(NSString*)key additionalData:(NSString*)additionalData resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 {
-    const NSData *dc = [self base642Bin:cipherText variant:[NSNumber numberWithInt:sodium_base64_VARIANT_ORIGINAL]];
+    const NSData *dc = [self base64ToBin:cipherText variant:[NSNumber numberWithInt:sodium_base64_VARIANT_ORIGINAL_NO_PADDING]];
     const NSData *dn = [self hexToBin:public_nonce];
     const NSData *dk = [self hexToBin:key];
     if (!dc || !dn || !dk) reject(ESODIUM,ERR_FAILURE,nil);
@@ -259,10 +245,10 @@ RCT_EXPORT_METHOD(crypto_aead_xchacha20poly1305_ietf_decrypt:(NSString*)cipherTe
     else {
         const NSData *ad = additionalData != NULL ? [additionalData dataUsingEncoding:NSUTF8StringEncoding] : NULL;
         unsigned long adlen = additionalData != NULL ? ad.length : 0;
-        
+
         unsigned long long decrypted_len = [NSNumber numberWithLongLong: dc.length].unsignedLongLongValue;
         unsigned char* decrypted = (unsigned char *) sodium_malloc(decrypted_len - crypto_aead_chacha20poly1305_IETF_ABYTES);
-        
+
         if (crypto_aead_xchacha20poly1305_ietf_decrypt(decrypted, &decrypted_len, NULL, [dc bytes], dc.length, ad ? [ad bytes] : NULL, adlen, [dn bytes], [dk bytes]) == -1) {
             reject(ESODIUM,ERR_FAILURE,nil);
         }
@@ -377,7 +363,7 @@ RCT_EXPORT_METHOD(crypto_box_beforenm:(NSString*)pk sk:(NSString*)sk resolve:(RC
 {
     const NSData *dpk = [[NSData alloc] initWithBase64EncodedString:pk options:0];
     const NSData *dsk = [[NSData alloc] initWithBase64EncodedString:sk options:0];
-    
+
     unsigned char *dshared = (unsigned char *) sodium_malloc(crypto_box_PUBLICKEYBYTES);
     if (!dpk || !dsk) reject(ESODIUM,ERR_FAILURE,nil);
     else if (dpk.length != crypto_box_PUBLICKEYBYTES || dsk.length != crypto_box_SECRETKEYBYTES) reject(ESODIUM,ERR_BAD_KEY,nil);
@@ -407,7 +393,7 @@ RCT_EXPORT_METHOD(crypto_pwhash:(nonnull NSNumber*)keylen password:(NSString*)pa
     const NSData *dsalt = [self hexToBin:salt];
     unsigned long long key_len = [keylen unsignedLongLongValue];
     unsigned char *key = (unsigned char *) sodium_malloc(key_len);
-    
+
     if (crypto_pwhash(key, key_len,
                       [dpassword bytes],
                       [dpassword length],
@@ -419,7 +405,7 @@ RCT_EXPORT_METHOD(crypto_pwhash:(nonnull NSNumber*)keylen password:(NSString*)pa
         NSData *result = [NSData dataWithBytesNoCopy:key length:key_len freeWhenDone:NO];
         resolve([self binToHex:result]);
     }
-    
+
 }
 
 RCT_EXPORT_METHOD(crypto_box_seal_open:(NSString*)c pk:(NSString*)pk sk:(NSString*)sk resolve: (RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
@@ -569,7 +555,7 @@ RCT_EXPORT_METHOD(crypto_sign_ed25519_sk_to_pk:(NSString*)sk resolve: (RCTPromis
 RCT_EXPORT_METHOD(to_base64:(NSString*)message variant:(NSNumber * _Nonnull)variant resolve: (RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 {
     NSData *m = [message dataUsingEncoding:NSUTF8StringEncoding];
-    
+
     if (m != nil || !variant) {
         reject(ESODIUM, ERR_FAILURE, nil);
     } else {
@@ -587,7 +573,7 @@ RCT_EXPORT_METHOD(from_base64:(NSString*)cipher variant:(NSNumber * _Nonnull)var
     if (!cipher || !variant) {
         reject(ESODIUM, ERR_FAILURE, nil);
     } else {
-        NSData *result = [self base642Bin:cipher variant:variant];
+        NSData *result = [self base64ToBin:cipher variant:variant];
         if (result == nil)
             reject(ESODIUM, ERR_FAILURE, nil);
         else {
@@ -636,16 +622,16 @@ RCT_EXPORT_METHOD(sodium_hex2bin:(NSString*)cipher resolve: (RCTPromiseResolveBl
     }
 }
 
-- (NSData * __strong) base642Bin:(NSString*)cipher variant:(NSNumber * _Nonnull)variant {
+- (NSData * __strong) base64ToBin:(NSString*)cipher variant:(NSNumber * _Nonnull)variant {
     const NSData *c = [cipher dataUsingEncoding:NSUTF8StringEncoding];
-    
+
     if (c && variant) {
-        
+
         // since libsodium doesn't provide the reverse of
         // sodium_base64_encoded_len(size_t bin_len, int variant)
         // to estimate bin_maxlen, we set it conservatively to
         // the size of the base64 representation
-        
+
         size_t clen = [c length];
         unsigned char * const decoded = (unsigned char * const) sodium_malloc(clen);
         size_t decoded_len = [NSNumber numberWithLongLong: clen].unsignedLongLongValue;
@@ -672,7 +658,7 @@ RCT_EXPORT_METHOD(sodium_hex2bin:(NSString*)cipher resolve: (RCTPromiseResolveBl
 
 - (NSData * __strong) hexToBin:(NSString*)hex {
     const NSData *h = [hex dataUsingEncoding:NSUTF8StringEncoding];
-    
+
     size_t clen = [h length];
     unsigned char * const encoded = (unsigned char * const) sodium_malloc(clen);
     size_t decoded_len = [NSNumber numberWithLongLong: clen].unsignedLongLongValue;

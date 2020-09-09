@@ -251,7 +251,6 @@ export function crypto_sign_verify_detached(
 ): Promise<boolean>;
 
 export function randombytes_buf(length: number): Promise<string>;
-export function randombytes_buf_b64(length: number): Promise<string>;
 
 export function randombytes_close(): void;
 

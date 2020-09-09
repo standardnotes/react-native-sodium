@@ -109,7 +109,7 @@
       try {
         byte[] buf = new byte[size];
         Sodium.randombytes_buf(buf, size);
-        p.resolve(Base64.encodeToString(buf,Base64.NO_WRAP));
+        p.resolve(this.binToHex(buf));
       }
       catch (Throwable t) {
         p.reject(ESODIUM,ERR_FAILURE,t);
@@ -242,8 +242,8 @@
     public void crypto_aead_xchacha20poly1305_ietf_encrypt(final String message, final String public_nonce, final String key, final String additionalData, final Promise p) {
       try {
         byte[] m = message.getBytes(StandardCharsets.UTF_8);
-        byte[] npub = Base64.decode(public_nonce, Base64.NO_WRAP);
-        byte[] k = Base64.decode(key, Base64.NO_WRAP);
+        byte[] npub = this.hexToBin(public_nonce);
+        byte[] k = this.hexToBin(key);
 
         if (m.length <= 0)
           p.reject(ESODIUM,ERR_FAILURE);
@@ -260,7 +260,7 @@
           if (result != 0)
             p.reject(ESODIUM,ERR_FAILURE);
           else
-            p.resolve(Base64.encodeToString(c, Base64.NO_WRAP));
+            p.resolve(this.binToBase64(c, Sodium.base64_variant_VARIANT_ORIGINAL_NO_PADDING()));
         }
       }
       catch (Throwable t) {
@@ -271,9 +271,9 @@
     @ReactMethod
     public void crypto_aead_xchacha20poly1305_ietf_decrypt(final String cipherText, final String public_nonce, final String key, final String additionalData, final Promise p) {
       try {
-        byte[] c = Base64.decode(cipherText, Base64.NO_WRAP);
-        byte[] npub = Base64.decode(public_nonce, Base64.NO_WRAP);
-        byte[] k = Base64.decode(key, Base64.NO_WRAP);
+        byte[] c = this.base64ToBin(cipherText, Sodium.base64_variant_VARIANT_ORIGINAL_NO_PADDING());
+        byte[] npub = this.hexToBin(public_nonce);
+        byte[] k = this.hexToBin(key);
         if (c.length <= 0)
           p.reject(ESODIUM,ERR_FAILURE);
         else if (npub.length != Sodium.crypto_aead_xchacha20poly1305_IETF_NPUBBYTES())
@@ -453,7 +453,7 @@
     @ReactMethod
     public void crypto_pwhash(final Integer keylen, final String password, final String salt, final Integer opslimit, final Integer memlimit, final Integer algo , final Promise p) {
       try {
-        byte[] saltb = Base64.decode(salt, Base64.NO_WRAP);
+        byte[] saltb = this.hexToBin(salt);
         byte[] passwordb = password.getBytes(StandardCharsets.UTF_8);
         byte[] out = new byte[keylen];
 
@@ -461,7 +461,7 @@
         if (result != 0)
           p.reject(ESODIUM,ERR_FAILURE);
         else
-          p.resolve(Base64.encodeToString(out, Base64.NO_WRAP));
+          p.resolve(this.binToHex(out));
       }
       catch (Throwable t) {
         p.reject(ESODIUM,ERR_FAILURE,t);
@@ -723,90 +723,121 @@
     // ***************************************************************************
 
     @ReactMethod
-    public void sodium_bin2base64(final String message, final int variant, final Promise p) {
-      try {
-        byte[] m = message.getBytes(StandardCharsets.UTF_8);
-
-        if (m.length <= 0 || variant == 0)
-          p.reject(ESODIUM,ERR_FAILURE);
-
-        else {
-          int clen = Sodium.sodium_base64_encoded_len(m.length, variant);
-          byte[] c = new byte[clen];
-          Sodium.sodium_bin2base64(c, clen, m, m.length, variant);
-          p.resolve(new String(c, StandardCharsets.UTF_8));
-        }
-      }
-      catch (Throwable t) {
-        p.reject(ESODIUM,ERR_FAILURE,t);
+    public void to_base64(final String message, final int variant, final Promise p) {
+      byte[] m = message.getBytes(StandardCharsets.UTF_8);
+      String result = this.binToBase64(m, variant);
+      if (result == null) {
+        p.reject(ESODIUM,ERR_FAILURE);
+      } else {
+        p.resolve(result);
       }
     }
 
     @ReactMethod
-    public void sodium_base642bin(final String cipher, final int variant, final Promise p) {
+    public void from_base64(final String cipher, final int variant, final Promise p) {
+      byte[] result = this.base64ToBin(cipher, variant);
+      if (result == null) {
+        p.reject(ESODIUM,ERR_FAILURE);
+      } else {
+        p.resolve(new String(result, StandardCharsets.UTF_8));
+      }
+    }
+
+    @ReactMethod
+    public void to_hex(final String message, final Promise p) {
+      byte[] m = message.getBytes(StandardCharsets.UTF_8);
+      String result = this.binToHex(m);
+      if (result == null) {
+        p.reject(ESODIUM,ERR_FAILURE);
+      } else {
+        p.resolve(result);
+      }
+    }
+
+    @ReactMethod
+    public void from_hex(final String cipher, final Promise p) {
+      byte[] result = this.hexToBin(cipher);
+      if (result == null) {
+        p.reject(ESODIUM,ERR_FAILURE);
+      } else {
+        p.resolve(new String(result, StandardCharsets.UTF_8));
+      }
+    }
+
+    private String binToBase64(final byte[] data, final int variant) {
+      try {
+        if (data.length <= 0 || variant == 0)
+          return null;
+        else {
+          int encoded_len = Sodium.sodium_base64_encoded_len(data.length, variant);
+          byte[] encoded = new byte[encoded_len];
+          Sodium.sodium_bin2base64(encoded, encoded_len, data, data.length, variant);
+          return new String(encoded, StandardCharsets.UTF_8);
+        }
+      }
+      catch (Throwable t) {
+        return null;
+      }
+    }
+
+    private byte[] base64ToBin(String cipher, final int variant) {
       try {
         byte[] c = cipher.getBytes(StandardCharsets.UTF_8);
 
         if (c.length <= 0 || variant == 0)
-          p.reject(ESODIUM,ERR_FAILURE);
+          return null;
 
         else {
           int blen = c.length;
-          byte[] m = new byte[blen];
-          int[] decrypted_len = new int[1];
-          int result = Sodium.sodium_base642bin(m, blen, c, c.length, null, decrypted_len, null, variant);
+          byte[] decoded = new byte[blen];
+          int[] decoded_len = new int[1];
+          int result = Sodium.sodium_base642bin(decoded, blen, c, c.length, null, decoded_len, null, variant);
           if (result != 0)
-            p.reject(ESODIUM,ERR_FAILURE);
+            return null;
           else
-            p.resolve(new String(m, StandardCharsets.UTF_8));
+            return decoded;
         }
       }
       catch (Throwable t) {
-        p.reject(ESODIUM,ERR_FAILURE,t);
+        return null;
       }
     }
 
-    @ReactMethod
-    public void sodium_bin2hex(final String message, final Promise p) {
+    private String binToHex(final byte[] data) {
       try {
-        byte[] m = message.getBytes(StandardCharsets.UTF_8);
-
-        if (m.length <= 0)
-          p.reject(ESODIUM,ERR_FAILURE);
+        if (data.length <= 0)
+          return null;
 
         else {
-          int hexLen = m.length * 2 + 1;
-          byte[] hex = new byte[hexLen];
-          Sodium.sodium_bin2hex(hex, hexLen, m, m.length);
-          p.resolve(new String(hex, StandardCharsets.UTF_8));
+          int encoded_len = data.length * 2 + 1;
+          byte[] encoded = new byte[encoded_len];
+          Sodium.sodium_bin2hex(encoded, encoded_len, data, data.length);
+          return new String(encoded, StandardCharsets.UTF_8);
         }
-      }
-      catch (Throwable t) {
-        p.reject(ESODIUM,ERR_FAILURE,t);
+      } catch (Throwable t) {
+        return null;
       }
     }
 
-    @ReactMethod
-    public void sodium_hex2bin(final String cipher, final Promise p) {
+    private byte[] hexToBin(String cipher) {
       try {
         byte[] c = cipher.getBytes(StandardCharsets.UTF_8);
 
         if (c.length <= 0)
-          p.reject(ESODIUM,ERR_FAILURE);
+          return null;
 
         else {
           int blen = c.length;
-          byte[] bin = new byte[blen];
-          int[] decrypted_len = new int[1];
-          int result = Sodium.sodium_hex2bin(bin, blen, c, c.length, null, decrypted_len, null);
+          byte[] decoded = new byte[blen];
+          int[] decoded_len = new int[1];
+          int result = Sodium.sodium_hex2bin(decoded, blen, c, c.length, null, decoded_len, null);
           if (result != 0)
-            p.reject(ESODIUM,ERR_FAILURE);
+            return null;
           else
-            p.resolve(new String(bin, StandardCharsets.UTF_8));
+            return decoded;
         }
-      }
-      catch (Throwable t) {
-        p.reject(ESODIUM,ERR_FAILURE,t);
+      } catch (Throwable t) {
+        return null;
       }
     }
   }
