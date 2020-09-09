@@ -593,7 +593,7 @@ RCT_EXPORT_METHOD(to_hex:(NSString*)message resolve: (RCTPromiseResolveBlock)res
     }
 }
 
-RCT_EXPORT_METHOD(sodium_hex2bin:(NSString*)cipher resolve: (RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+RCT_EXPORT_METHOD(from_hex:(NSString*)cipher resolve: (RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 {
     NSData *result = [self hexToBin:cipher];
     if (result == nil) reject(ESODIUM, ERR_FAILURE, nil);
