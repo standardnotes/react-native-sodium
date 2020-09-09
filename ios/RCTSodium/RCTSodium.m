@@ -227,7 +227,7 @@ RCT_EXPORT_METHOD(crypto_aead_xchacha20poly1305_ietf_encrypt:(NSString*)message 
                 reject(ESODIUM,ERR_FAILURE,nil);
             else {
                 NSData *resultData = [NSData dataWithBytesNoCopy:c length:clen freeWhenDone:NO];
-                resolve([self binToBase64:resultData variant:[NSNumber numberWithInt:sodium_base64_VARIANT_ORIGINAL_NO_PADDING]]);
+                resolve([self binToBase64:resultData variant:[NSNumber numberWithInt:sodium_base64_VARIANT_ORIGINAL]]);
             }
             sodium_free(c);
         }
@@ -236,7 +236,7 @@ RCT_EXPORT_METHOD(crypto_aead_xchacha20poly1305_ietf_encrypt:(NSString*)message 
 
 RCT_EXPORT_METHOD(crypto_aead_xchacha20poly1305_ietf_decrypt:(NSString*)cipherText public_nonce:(NSString*)public_nonce key:(NSString*)key additionalData:(NSString*)additionalData resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 {
-    const NSData *dc = [self base64ToBin:cipherText variant:[NSNumber numberWithInt:sodium_base64_VARIANT_ORIGINAL_NO_PADDING]];
+    const NSData *dc = [self base64ToBin:cipherText variant:[NSNumber numberWithInt:sodium_base64_VARIANT_ORIGINAL]];
     const NSData *dn = [self hexToBin:public_nonce];
     const NSData *dk = [self hexToBin:key];
     if (!dc || !dn || !dk) reject(ESODIUM,ERR_FAILURE,nil);

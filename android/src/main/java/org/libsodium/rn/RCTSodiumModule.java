@@ -4,6 +4,7 @@ package org.libsodium.rn;
  * Created by Lyubomir Ivanov on 21/09/16.
  */
 
+import java.util.Arrays;
 import java.util.Map;
 import java.util.HashMap;
 import android.util.Base64;
@@ -19,6 +20,8 @@ import com.facebook.react.common.MapBuilder;
 import com.facebook.react.common.StandardCharsets;
 
 import org.libsodium.jni.Sodium;
+
+import jnr.ffi.byref.LongLongByReference;
 
 public class RCTSodiumModule extends ReactContextBaseJavaModule {
 
@@ -260,7 +263,7 @@ public class RCTSodiumModule extends ReactContextBaseJavaModule {
         if (result != 0)
           p.reject(ESODIUM,ERR_FAILURE);
         else
-          p.resolve(this.binToBase64(c, Sodium.base64_variant_VARIANT_ORIGINAL_NO_PADDING()));
+          p.resolve(this.binToBase64(c, Sodium.base64_variant_ORIGINAL()));
       }
     }
     catch (Throwable t) {
@@ -271,10 +274,10 @@ public class RCTSodiumModule extends ReactContextBaseJavaModule {
   @ReactMethod
   public void crypto_aead_xchacha20poly1305_ietf_decrypt(final String cipherText, final String public_nonce, final String key, final String additionalData, final Promise p) {
     try {
-      byte[] c = this.base64ToBin(cipherText, Sodium.base64_variant_VARIANT_ORIGINAL_NO_PADDING());
+      byte[] c = this.base64ToBin(cipherText, Sodium.base64_variant_ORIGINAL());
       byte[] npub = this.hexToBin(public_nonce);
       byte[] k = this.hexToBin(key);
-      if (c.length <= 0)
+      if (c == null || c.length <= 0)
         p.reject(ESODIUM,ERR_FAILURE);
       else if (npub.length != Sodium.crypto_aead_xchacha20poly1305_IETF_NPUBBYTES())
         p.reject(ESODIUM,ERR_BAD_NONCE);
@@ -795,7 +798,7 @@ public class RCTSodiumModule extends ReactContextBaseJavaModule {
         if (result != 0)
           return null;
         else
-          return decoded;
+          return Arrays.copyOfRange(decoded, 0, decoded_len[0]);
       }
     }
     catch (Throwable t) {
@@ -834,7 +837,7 @@ public class RCTSodiumModule extends ReactContextBaseJavaModule {
         if (result != 0)
           return null;
         else
-          return decoded;
+          return Arrays.copyOfRange(decoded, 0, decoded_len[0]);
       }
     } catch (Throwable t) {
       return null;
