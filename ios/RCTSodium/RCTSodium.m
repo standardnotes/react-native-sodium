@@ -568,12 +568,12 @@ RCT_EXPORT_METHOD(to_base64:(NSString*)message variant:(NSNumber * _Nonnull)vari
     }
 }
 
-RCT_EXPORT_METHOD(from_base64:(NSString*)cipher variant:(NSNumber * _Nonnull)variant resolve: (RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+RCT_EXPORT_METHOD(from_base64:(NSString*)base64String variant:(NSNumber * _Nonnull)variant resolve: (RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 {
-    if (!cipher || !variant) {
+    if (!base64String || !variant) {
         reject(ESODIUM, ERR_FAILURE, nil);
     } else {
-        NSData *result = [self base64ToBin:cipher variant:variant];
+        NSData *result = [self base64ToBin:base64String variant:variant];
         if (result == nil)
             reject(ESODIUM, ERR_FAILURE, nil);
         else {
@@ -593,9 +593,9 @@ RCT_EXPORT_METHOD(to_hex:(NSString*)message resolve: (RCTPromiseResolveBlock)res
     }
 }
 
-RCT_EXPORT_METHOD(from_hex:(NSString*)cipher resolve: (RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
+RCT_EXPORT_METHOD(from_hex:(NSString*)hexString resolve: (RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 {
-    NSData *result = [self hexToBin:cipher];
+    NSData *result = [self hexToBin:hexString];
     if (result == nil) reject(ESODIUM, ERR_FAILURE, nil);
     else {
         const NSString *res = [[NSString alloc] initWithData:result encoding:NSUTF8StringEncoding];
@@ -622,8 +622,8 @@ RCT_EXPORT_METHOD(from_hex:(NSString*)cipher resolve: (RCTPromiseResolveBlock)re
     }
 }
 
-- (NSData * __strong) base64ToBin:(NSString*)cipher variant:(NSNumber * _Nonnull)variant {
-    const NSData *c = [cipher dataUsingEncoding:NSUTF8StringEncoding];
+- (NSData * __strong) base64ToBin:(NSString*)base64String variant:(NSNumber * _Nonnull)variant {
+    const NSData *c = [base64String dataUsingEncoding:NSUTF8StringEncoding];
 
     if (c && variant) {
 
@@ -656,8 +656,8 @@ RCT_EXPORT_METHOD(from_hex:(NSString*)cipher resolve: (RCTPromiseResolveBlock)re
     }
 }
 
-- (NSData * __strong) hexToBin:(NSString*)hex {
-    const NSData *h = [hex dataUsingEncoding:NSUTF8StringEncoding];
+- (NSData * __strong) hexToBin:(NSString*)hexString {
+    const NSData *h = [hexString dataUsingEncoding:NSUTF8StringEncoding];
 
     size_t clen = [h length];
     unsigned char * const encoded = (unsigned char * const) sodium_malloc(clen);
