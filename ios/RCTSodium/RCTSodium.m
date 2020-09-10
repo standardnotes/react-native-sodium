@@ -229,8 +229,7 @@ RCT_EXPORT_METHOD(crypto_aead_xchacha20poly1305_ietf_encrypt:(NSString*)message 
                 NSData *resultData = [NSData dataWithBytesNoCopy:c length:clen freeWhenDone:NO];
                 resolve([self binToBase64:resultData variant:[NSNumber numberWithInt:sodium_base64_VARIANT_ORIGINAL]]);
             }
-            sodium_free(c);
-        }
+            sodium_free(c);        }
     }
 }
 
@@ -403,6 +402,7 @@ RCT_EXPORT_METHOD(crypto_pwhash:(nonnull NSNumber*)keylen password:(NSString*)pa
         reject(ESODIUM, ERR_FAILURE, nil);
     else {
         NSData *result = [NSData dataWithBytesNoCopy:key length:key_len freeWhenDone:NO];
+        sodium_free(key);
         resolve([self binToHex:result]);
     }
 
@@ -614,6 +614,7 @@ RCT_EXPORT_METHOD(from_hex:(NSString*)hexString resolve: (RCTPromiseResolveBlock
         @try {
             sodium_bin2base64(encoded, max_len, [bin bytes], bin.length, [variant intValue]);
             NSString *res = [NSString stringWithCString:encoded encoding:NSUTF8StringEncoding];
+            sodium_free(encoded);
             return res;
         }
         @catch (NSException *exception) {
@@ -635,10 +636,14 @@ RCT_EXPORT_METHOD(from_hex:(NSString*)hexString resolve: (RCTPromiseResolveBlock
         size_t clen = [c length];
         unsigned char * const decoded = (unsigned char * const) sodium_malloc(clen);
         size_t decoded_len = [NSNumber numberWithLongLong: clen].unsignedLongLongValue;
-        if (sodium_base642bin(decoded, clen, [c bytes], clen, NULL, &decoded_len, NULL, [variant intValue]) != 0)
+        if (sodium_base642bin(decoded, clen, [c bytes], clen, NULL, &decoded_len, NULL, [variant intValue]) != 0) {
+            sodium_free(decoded);
             return nil;
+        }
         else {
-            return [NSData dataWithBytesNoCopy:decoded length:decoded_len freeWhenDone:NO];
+            NSData *result = [NSData dataWithBytes:decoded length:decoded_len];
+            sodium_free(decoded);
+            return result;
         }
     }
     return nil;
@@ -649,9 +654,12 @@ RCT_EXPORT_METHOD(from_hex:(NSString*)hexString resolve: (RCTPromiseResolveBlock
     char * const encoded = (char * const) sodium_malloc(hex_maxlen);
     @try {
         sodium_bin2hex(encoded, hex_maxlen, [bin bytes], [bin length]);
-        return [NSString stringWithCString:encoded encoding:NSUTF8StringEncoding];
+        NSString *result = [NSString stringWithCString:encoded encoding:NSUTF8StringEncoding];
+        sodium_free(encoded);
+        return result;
     }
     @catch (NSException *exception) {
+        sodium_free(encoded);
         return nil;
     }
 }
@@ -660,13 +668,16 @@ RCT_EXPORT_METHOD(from_hex:(NSString*)hexString resolve: (RCTPromiseResolveBlock
     const NSData *h = [hexString dataUsingEncoding:NSUTF8StringEncoding];
 
     size_t clen = [h length];
-    unsigned char * const encoded = (unsigned char * const) sodium_malloc(clen);
+    unsigned char * const decoded = (unsigned char * const) sodium_malloc(clen);
     size_t decoded_len = [NSNumber numberWithLongLong: clen].unsignedLongLongValue;
-    if (sodium_hex2bin(encoded, clen, [h bytes], clen, NULL, &decoded_len, NULL) != 0) {
+    if (sodium_hex2bin(decoded, clen, [h bytes], clen, NULL, &decoded_len, NULL) != 0) {
+        sodium_free(decoded);
         return nil;
     }
     else {
-        return [NSData dataWithBytesNoCopy:encoded length:decoded_len freeWhenDone:NO];
+        NSData *result = [NSData dataWithBytes:decoded length:decoded_len ];
+        sodium_free(decoded);
+        return result;
     }
 }
 
