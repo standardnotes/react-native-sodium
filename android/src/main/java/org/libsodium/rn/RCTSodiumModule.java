@@ -21,8 +21,6 @@ import com.facebook.react.common.StandardCharsets;
 
 import org.libsodium.jni.Sodium;
 
-import jnr.ffi.byref.LongLongByReference;
-
 public class RCTSodiumModule extends ReactContextBaseJavaModule {
 
   static final String ESODIUM = "ESODIUM";
