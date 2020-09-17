@@ -402,9 +402,9 @@ RCT_EXPORT_METHOD(crypto_pwhash:(nonnull NSNumber*)keylen password:(NSString*)pa
         reject(ESODIUM, ERR_FAILURE, nil);
     else {
         NSData *result = [NSData dataWithBytesNoCopy:key length:key_len freeWhenDone:NO];
-        sodium_free(key);
         resolve([self binToHex:result]);
     }
+    sodium_free(key);
 
 }
 
