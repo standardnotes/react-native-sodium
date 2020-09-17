@@ -18,5 +18,5 @@ Pod::Spec.new do |s|
   s.ios.vendored_library = 'libsodium/libsodium-ios/lib/libsodium.a'
   s.xcconfig = { 'HEADER_SEARCH_PATHS' => '${PODS_ROOT}/Headers/Public/#{s.name}/**'}
 
-  s.dependency 'React'
+  s.dependency 'React-Core'
 end
