@@ -773,7 +773,8 @@ public class RCTSodiumModule extends ReactContextBaseJavaModule {
         int encoded_len = Sodium.sodium_base64_encoded_len(data.length, variant);
         byte[] encoded = new byte[encoded_len];
         Sodium.sodium_bin2base64(encoded, encoded_len, data, data.length, variant);
-        return new String(encoded, StandardCharsets.UTF_8);
+        String result = new String(encoded, StandardCharsets.UTF_8);
+        return result.substring(0, result.length() - 1); // remove /0 byte
       }
     }
     catch (Throwable t) {
@@ -813,7 +814,8 @@ public class RCTSodiumModule extends ReactContextBaseJavaModule {
         int encoded_len = data.length * 2 + 1;
         byte[] encoded = new byte[encoded_len];
         Sodium.sodium_bin2hex(encoded, encoded_len, data, data.length);
-        return new String(encoded, StandardCharsets.UTF_8);
+        String result = new String(encoded, StandardCharsets.UTF_8);
+        return result.substring(0, result.length() - 1); // remove /0 byte
       }
     } catch (Throwable t) {
       return null;
