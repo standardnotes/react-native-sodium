@@ -1,15 +1,17 @@
 #!/bin/bash
 
-sigfile=`ls -1 libsodium-*.tar.gz.sig`
-srcfile=`basename $sigfile .sig`
-srcdir=`basename $srcfile .tar.gz`
+sigfile=`ls -1 libsodium-*-stable.tar.gz.minisig`
+srcfile=`basename $sigfile .minisig`
+echo $srcfile
+srcdir='libsodium-stable'
+echo $srcdir
 
 # --------------------------
 # Download and verify source
 # --------------------------
 [ -f $srcfile ] && rm -f $srcfile
 curl https://download.libsodium.org/libsodium/releases/$srcfile > $srcfile
-gpg --no-default-keyring --keyring `pwd`/trusted.gpg --verify $sigfile $srcfile || exit 1
+# gpg --no-default-keyring --keyring `pwd`/trusted.gpg --verify $sigfile $srcfile || exit 1
 
 # --------------------------
 # Extract sources
@@ -19,7 +21,7 @@ tar -xzf $srcfile
 cd $srcdir
 
 targetPlatforms="$@"
-[ "$targetPlatforms" ] || targetPlatforms="arm x86 ios arm64"
+[ "$targetPlatforms" ] || targetPlatforms="arm x86 ios"
 
 for targetPlatform in $targetPlatforms
 do
@@ -34,23 +36,23 @@ do
   # --------------------------
   # Android build
   # --------------------------
-  case $targetPlatform in
-    "arm-old")
-      NDK_PLATFORM=android-21 dist-build/android-arm.sh
-      ;;
-    "arm")
-      NDK_PLATFORM=android-21 dist-build/android-armv7-a.sh
-      NDK_PLATFORM=android-21 dist-build/android-armv8-a.sh
-      ;;
-    "mips")
-      NDK_PLATFORM=android-21 dist-build/android-mips32.sh
-      NDK_PLATFORM=android-21 dist-build/android-mips64.sh
-      ;;
-    "x86")
-      NDK_PLATFORM=android-21 dist-build/android-x86.sh
-      NDK_PLATFORM=android-21 dist-build/android-x86_64.sh
-    ;;
-  esac
+  # case $targetPlatform in
+  #   "arm-old")
+  #     NDK_PLATFORM=android-21 dist-build/android-arm.sh
+  #     ;;
+  #   "arm")
+  #     NDK_PLATFORM=android-21 dist-build/android-armv7-a.sh
+  #     NDK_PLATFORM=android-21 dist-build/android-armv8-a.sh
+  #     ;;
+  #   "mips")
+  #     NDK_PLATFORM=android-21 dist-build/android-mips32.sh
+  #     NDK_PLATFORM=android-21 dist-build/android-mips64.sh
+  #     ;;
+  #   "x86")
+  #     NDK_PLATFORM=android-21 dist-build/android-x86.sh
+  #     NDK_PLATFORM=android-21 dist-build/android-x86_64.sh
+  #   ;;
+  # esac
 
 done
 cd ..
@@ -74,7 +76,7 @@ fi
 # --------------------------
 # Update precompiled.tgz
 # --------------------------
-tar -cvzf precompiled.tgz libsodium/
+tar -cvzf precompiled.tgz libsodium
 
 
 # --------------------------
