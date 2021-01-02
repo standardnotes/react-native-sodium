@@ -1,15 +1,15 @@
 #!/bin/bash
 
-sigfile=`ls -1 libsodium-*.tar.gz.sig`
-srcfile=`basename $sigfile .sig`
-srcdir=`basename $srcfile .tar.gz`
+sigfile=`ls -1 libsodium-*-stable.tar.gz.minisig`
+srcfile=`basename $sigfile .minisig`
+srcdir='libsodium-stable'
 
 # --------------------------
 # Download and verify source
 # --------------------------
 [ -f $srcfile ] && rm -f $srcfile
 curl https://download.libsodium.org/libsodium/releases/$srcfile > $srcfile
-gpg --no-default-keyring --keyring `pwd`/trusted.gpg --verify $sigfile $srcfile || exit 1
+minisign -P "RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3" -Vm $srcfile || exit 1
 
 # --------------------------
 # Extract sources
@@ -28,7 +28,7 @@ do
   # --------------------------
   platform=`uname`
   if [ "$platform" == 'Darwin' ] && [ "$targetPlatform" == 'ios' ]; then
-    IOS_VERSION_MIN=9.0 dist-build/ios.sh
+    IOS_VERSION_MIN=10.0.0 dist-build/apple-xcframework.sh
   fi
 
   # --------------------------
@@ -67,14 +67,15 @@ do
   mv $dir libsodium/
 done
 
-if [ "$platform" == 'Darwin' ] && [ -e $srcdir/libsodium-ios ]; then
-  mv $srcdir/libsodium-ios libsodium/
+if [ "$platform" == 'Darwin' ] && [ -e $srcdir/libsodium-apple ]; then
+  echo $PWD
+  mv $srcdir/libsodium-apple libsodium/
 fi
 
 # --------------------------
 # Update precompiled.tgz
 # --------------------------
-tar -cvzf precompiled.tgz libsodium/
+tar -cvzf precompiled.tgz libsodium
 
 
 # --------------------------
