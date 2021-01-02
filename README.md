@@ -6,17 +6,22 @@ Optionally, you can choose to compile libsodium by yourself (run __npm&nbsp;run&
 ### Source compilation
 ###### General prerequisites
 * gpg (macports, homebrew)
+* minisign (homebrew)
 
 ###### MacOS prerequisites
 * libtool (macports, homebrew)
 * autoconf (macports, homebrew)
 * automake (macports, homebrew)
+* Xcode (12 or newer)
 
 
 ###### Android prerequisites
 * Android NDK
 * CMake
 * LLDB
+
+### Recompile and repackage
+1. `yarn rebundle`
 
 ### Usage
 
