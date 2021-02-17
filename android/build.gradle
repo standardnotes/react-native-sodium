@@ -44,7 +44,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    ndkVersion '21.3.6528147'
+    ndkVersion '21.4.7075529'
     externalNativeBuild {
         cmake {
             path "CMakeLists.txt"
