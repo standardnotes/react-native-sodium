@@ -125,9 +125,8 @@ public class RCTSodiumModule extends ReactContextBaseJavaModule {
       else {
         byte[] ad = additionalData != null ? additionalData.getBytes(StandardCharsets.UTF_8) : null;
         int adlen = additionalData != null ? ad.length : 0;
-        int[] clen = new int[0];
         byte[] c = new byte[m.length + Sodium.crypto_aead_chacha20poly1305_IETF_ABYTES()];
-        int result = Sodium.crypto_aead_xchacha20poly1305_ietf_encrypt(c, clen, m, m.length, ad, adlen, null, npub, k);
+        int result = Sodium.crypto_aead_xchacha20poly1305_ietf_encrypt(c, null, m, m.length, ad, adlen, null, npub, k);
         if (result != 0)
           p.reject(ESODIUM,ERR_FAILURE);
         else
