@@ -1,9 +1,4 @@
 # ninja log v5
-0	699	0	CMakeFiles/sodium-jni.dir/src/main/cpp/sodium-jni.c.o	f26399fac4fae07c
-700	801	0	../../../../build/intermediates/cmake/debug/obj/x86/libsodium-jni.so	57eaa2fec7eec081
-1	199	0	CMakeFiles/sodium-jni.dir/src/main/cpp/sodium-jni.c.o	f26399fac4fae07c
-199	429	0	../../../../build/intermediates/cmake/debug/obj/x86/libsodium-jni.so	57eaa2fec7eec081
-1	725	0	CMakeFiles/sodium-jni.dir/src/main/cpp/sodium-jni.c.o	f26399fac4fae07c
-726	818	0	../../../../build/intermediates/cmake/debug/obj/x86/libsodium-jni.so	57eaa2fec7eec081
-1	780	0	CMakeFiles/sodium-jni.dir/src/main/cpp/sodium-jni.c.o	f26399fac4fae07c
-780	848	0	../../../../build/intermediates/cmake/debug/obj/x86/libsodium-jni.so	57eaa2fec7eec081
+0	57	1633276814	CMakeFiles/cpp.dir/Users/radko93/Repo/react-native-sodium/cpp/example.cpp.o	8def724d4e80b303
+0	63	1633276814	CMakeFiles/cpp.dir/cpp-adapter.cpp.o	e1cc89dcc89081e7
+63	114	1633276814	../../../../build/intermediates/cmake/debug/obj/x86/libcpp.so	ad45946e9d0994bc
