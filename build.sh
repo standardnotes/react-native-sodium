@@ -31,9 +31,9 @@ do
     IOS_VERSION_MIN=10.0.0 dist-build/apple-xcframework.sh
   fi
 
-  # --------------------------
-  # Android build
-  # --------------------------
+  # # --------------------------
+  # # Android build
+  # # --------------------------
   case $targetPlatform in
     "arm-old")
       NDK_PLATFORM=android-21 dist-build/android-arm.sh

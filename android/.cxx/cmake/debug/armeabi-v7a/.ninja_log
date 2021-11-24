@@ -1,3 +1,4 @@
 # ninja log v5
-0	1381	0	CMakeFiles/sodium-jni.dir/src/main/cpp/sodium-jni.c.o	ea865afb0e93a793
-1382	1469	0	../../../../build/intermediates/cmake/debug/obj/armeabi-v7a/libsodium-jni.so	813463bf0bd15870
+0	201	1633276814	CMakeFiles/cpp.dir/Users/radko93/Repo/react-native-sodium/cpp/example.cpp.o	f61fde802e382995
+0	201	1633276814	CMakeFiles/cpp.dir/cpp-adapter.cpp.o	d0b048850272b329
+201	259	1633276814	../../../../build/intermediates/cmake/debug/obj/armeabi-v7a/libcpp.so	10b19eba37cf4a84

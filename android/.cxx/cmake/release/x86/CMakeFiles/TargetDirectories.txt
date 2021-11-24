@@ -1,3 +1,0 @@
-/Users/radko93/Repo/react-native-sodium/android/.cxx/cmake/release/x86/CMakeFiles/edit_cache.dir
-/Users/radko93/Repo/react-native-sodium/android/.cxx/cmake/release/x86/CMakeFiles/rebuild_cache.dir
-/Users/radko93/Repo/react-native-sodium/android/.cxx/cmake/release/x86/CMakeFiles/sodium-jni.dir

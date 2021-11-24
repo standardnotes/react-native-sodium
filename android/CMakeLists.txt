@@ -1,4 +1,7 @@
-cmake_minimum_required(VERSION 3.4.1)
+cmake_minimum_required(VERSION 3.9.0)
+
+set (CMAKE_VERBOSE_MAKEFILE ON)
+set (CMAKE_CXX_STANDARD 11)
 
 set(ARCH_DIR ${ANDROID_ARCH_NAME})
 
@@ -12,11 +15,46 @@ elseif ( ANDROID_ABI STREQUAL "x86_64")
   set ( ARCH_DIR "westmere" )
 endif()
 
+add_library(cpp
+            SHARED
+            ../cpp/example.cpp
+            cpp-adapter.cpp
+)
 
-add_library(sodium SHARED IMPORTED)
-include_directories( ${PROJECT_SOURCE_DIR}/../libsodium/libsodium-android-${ARCH_DIR}/include/ )
-set_target_properties( sodium PROPERTIES IMPORTED_LOCATION ${PROJECT_SOURCE_DIR}/../libsodium/libsodium-android-${ARCH_DIR}/lib/libsodium.so )
-file(COPY ${PROJECT_SOURCE_DIR}/../libsodium/libsodium-android-${ARCH_DIR}/lib/libsodium.so DESTINATION "${PROJECT_SOURCE_DIR}/lib/${ANDROID_ABI}")
+# Specifies a path to native header files.
+include_directories(
+            ../cpp
+)
 
-add_library(sodium-jni SHARED src/main/cpp/sodium-jni.c)
-target_link_libraries(sodium-jni sodium)
+set_target_properties(
+        reactnativemmkv PROPERTIES
+        CXX_STANDARD 17
+        CXX_EXTENSIONS OFF
+        POSITION_INDEPENDENT_CODE ON
+)
+
+file (GLOB LIBRN_DIR "${BUILD_DIR}/react-native-0*/jni/${ANDROID_ABI}")
+
+find_library(
+        log-lib
+        log
+)
+find_library(
+        JSI_LIB
+        jsi
+        PATHS ${LIBRN_DIR}
+        NO_CMAKE_FIND_ROOT_PATH
+)
+find_library(
+        REACT_NATIVE_JNI_LIB
+        reactnativejni
+        PATHS ${LIBRN_DIR}
+        NO_CMAKE_FIND_ROOT_PATH
+)
+
+target_link_libraries(
+        ${log-lib}
+        ${JSI_LIB}
+        ${REACT_NATIVE_JNI_LIB}
+        android
+)
