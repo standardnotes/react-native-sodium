@@ -11,9 +11,12 @@ Pod::Spec.new do |s|
   s.authors      = package["author"]
 
   s.platforms    = { :ios => "10.0" }
-  s.source       = { :git => "https://github.com/radko93/react-native-sodium.git", :tag => "#{s.version}" }
+  s.source       = { :git => "https://github.com/standardnotes/react-native-sodium.git", :tag => "#{s.version}" }
 
   s.source_files = "ios/**/*.{h,m,mm}", "cpp/**/*.{h,cpp}"
+
+  s.vendored_frameworks = "libsodium/libsodium-apple/Clibsodium.xcframework"
+  s.xcconfig = { 'HEADER_SEARCH_PATHS' => '${PODS_ROOT}/Headers/Public/#{s.name}/**'}
 
   s.dependency "React-Core"
 end

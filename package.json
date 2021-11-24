@@ -1,6 +1,6 @@
 {
   "name": "react-native-sodium",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "JSI sodium implementation",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -29,7 +29,9 @@
     "release": "release-it",
     "example": "yarn --cwd example",
     "pods": "cd example && pod-install --quiet",
-    "bootstrap": "yarn example && yarn && yarn pods"
+    "bootstrap": "yarn example && yarn && yarn pods",
+    "postinstall": "tar -xzf precompiled.tgz",
+    "rebuild": "./build.sh"
   },
   "keywords": [
     "react-native",
