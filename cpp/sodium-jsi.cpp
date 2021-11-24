@@ -133,7 +133,7 @@ void install(jsi::Runtime& jsiRuntime) {
             std::string public_nonce = arguments[1].asString(runtime).utf8(runtime);
             std::string key = arguments[2].asString(runtime).utf8(runtime);
             
-            const unsigned char *m = "sda";
+            const unsigned char *m = hexToBin(message.c_str());
             unsigned char *npub = hexToBin(public_nonce.c_str());
             unsigned char *k = hexToBin(key.c_str());
             
